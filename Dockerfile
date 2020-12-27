@@ -6,6 +6,12 @@ RUN go env -w GOPRIVATE=github.com/JaimeRamos99/prueba-truora-2
 
 WORKDIR /app
 
+COPY go.mod .
+
+COPY go.sum .
+
+RUN go mod download
+
 COPY . .
 
 RUN apk add git
@@ -14,6 +20,7 @@ RUN git config --global url."https://JaimeRamos99:1c9f5eb32b83aaff36b473cdb02f2f
 
 RUN go build -o main .
 
-EXPOSE 8080
+ENV PORT 3000
+EXPOSE 3000
 
 CMD ["./main"]
