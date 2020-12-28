@@ -39,6 +39,8 @@ func UploadHandler(db *dgo.Dgraph, w http.ResponseWriter, r *http.Request){
       w.Write([]byte("Invalid date"))
       return
     }
+    
+    //Valid date
     res := logic.UploadData(db, input_date.Date)
     if res {
       w.Write([]byte("The data was upload"))
