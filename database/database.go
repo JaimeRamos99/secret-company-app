@@ -3,8 +3,8 @@ package database
 import (
   "log"
   "context"
-  "github.com/dgraph-io/dgo"
-  "github.com/dgraph-io/dgo/protos/api"
+  "github.com/dgraph-io/dgo/v200"
+  "github.com/dgraph-io/dgo/v200/protos/api"
   "google.golang.org/grpc"
 )
 
@@ -26,12 +26,12 @@ func NewClient() (*dgo.Dgraph, CancelFunc) {
       if err := conn.Close(); err != nil {
         log.Printf("Error while closing connection:%v", err)
       } else {
-        log.Println("conexión cerrada")
+        log.Println("Connection closed")
       }
     }
 }
 
-//Function that Drop all the schemas
+//Function that Drop all the schemas and data
 func DeleteAll(db *dgo.Dgraph){
   op := api.Operation{DropAll: true}
   ctx := context.Background()
@@ -41,6 +41,20 @@ func DeleteAll(db *dgo.Dgraph){
 }
 
 //Function that upserts the schema that tracks the dates that have been updated
-func CreateSchemaUploadDates(){
+func CreateSchemaUploadedDates(db *dgo.Dgraph){
 
+  //Schema to create
+  op := api.Operation{
+    Schema:
+    `date: string @index(exact) .
+     type UploadDate {
+       date
+     }
+    `,
+  }
+
+  ctx := context.Background()
+  if err := db.Alter(ctx, &op); err != nil {
+		log.Fatal(err)
+	}
 }

@@ -1,14 +1,13 @@
 package request_handlers
 
 import (
-  "log"
   "time"
   "regexp"
   "net/http"
   "encoding/json"
-  "github.com/dgraph-io/dgo"
-  "github.com/dgraph-io/dgo/protos/api"
-  "github.com/JaimeRamos99/prueba-truora-2/database"
+  "github.com/dgraph-io/dgo/v200"
+  "github.com/JaimeRamos99/prueba-truora-2/logic"
+  //"github.com/JaimeRamos99/prueba-truora-2/database"
 )
 
 type InputDate struct {
@@ -40,8 +39,12 @@ func UploadHandler(db *dgo.Dgraph, w http.ResponseWriter, r *http.Request){
       w.Write([]byte("Invalid date"))
       return
     }
-
-    w.Write([]byte("Invalid date"))
+    res := logic.UploadData(db, input_date.Date)
+    if res {
+      w.Write([]byte("The data was upload"))
+      return
+    }
+    w.Write([]byte("The data had already been uploaded"))
     return
   }
   w.Write([]byte("Invalid date"))

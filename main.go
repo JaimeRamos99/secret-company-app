@@ -10,9 +10,10 @@ import (
 
 func init(){
   db, close_conn := database.NewClient()
-  database.CreateSchemaUploadedDates()
+  database.CreateSchemaUploadedDates(db)
   defer close_conn()
 }
+
 func main(){
   db, close_conn := database.NewClient()
   defer close_conn()
