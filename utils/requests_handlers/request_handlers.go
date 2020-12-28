@@ -3,11 +3,11 @@ package request_handlers
 import (
   "time"
   "regexp"
+  "strconv"
   "net/http"
   "encoding/json"
   "github.com/dgraph-io/dgo/v200"
   "github.com/JaimeRamos99/prueba-truora-2/logic"
-  //"github.com/JaimeRamos99/prueba-truora-2/database"
 )
 
 type InputDate struct {
@@ -20,6 +20,8 @@ const (
 
 func UploadHandler(db *dgo.Dgraph, w http.ResponseWriter, r *http.Request){
   var input_date InputDate
+
+  //Parse json to struct
   json.NewDecoder(r.Body).Decode(&input_date)
   match, _ := regexp.MatchString("^[0-9]{4}-[0-9]{2}-[0-9]{2}$", input_date.Date)
 
@@ -39,9 +41,9 @@ func UploadHandler(db *dgo.Dgraph, w http.ResponseWriter, r *http.Request){
       w.Write([]byte("Invalid date"))
       return
     }
-    
+
     //Valid date
-    res := logic.UploadData(db, input_date.Date)
+    res := logic.UploadData(db, strconv.FormatInt(unix_time_input, 10))
     if res {
       w.Write([]byte("The data was upload"))
       return

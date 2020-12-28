@@ -52,23 +52,27 @@ func AddUploadDate(db *dgo.Dgraph, date string){
     txn := db.NewTxn()
     defer txn.Discard(ctx)
 
+    //Struct instance
     date_struct := Date{
     	Date:  date,
     	DType: []string{"Date"},
     }
 
+    //parse struct to json format
     date_json, err := json.Marshal(date_struct)
     if err != nil {
     	log.Fatal(err)
     }
 
+    //Set the transaction json mode
     mu := &api.Mutation{
     	SetJson: date_json,
     }
+
+    //Commit the transaction
     req := &api.Request{CommitNow:true, Mutations: []*api.Mutation{mu}}
-    res, err := txn.Do(ctx, req)
-    log.Printf("%s\n", res.Json)
-    if err != nil {
+    _, er := txn.Do(ctx, req)
+    if er != nil {
 	     log.Fatal(err)
     }
 }

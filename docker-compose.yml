@@ -1,0 +1,77 @@
+# Auto-generated with: [compose -a 3 -z 3 --port_offset=0 --local=false --expose_ports=false]
+#
+version: "3.5"
+services:
+  nginx:
+    image: nginx:1.17.7
+    depends_on:
+      # Hostnames referenced in nginx.conf need to be available
+      # before Nginx starts
+      - zero1
+      - zero2
+      - zero3
+      - alpha1
+      - alpha2
+      - alpha3
+    ports:
+      - 80:80
+      - 8080:8080
+      - 9080:9080
+    volumes:
+      - type: bind
+        source: ./nginx.conf
+        target: /etc/nginx/conf.d/dgraph.conf
+        read_only: true
+  alpha1:
+    image: dgraph/dgraph:latest
+    hostname: alpha1
+    ports:
+    - 8080
+    - 9080
+    command: dgraph alpha --whitelist 0.0.0.0/0 --my=alpha1:7080 --lru_mb=1024 --zero=zero1:5080 --logtostderr
+      -v=2 --idx=1
+  alpha2:
+    image: dgraph/dgraph:latest
+    hostname: alpha2
+    depends_on:
+    - alpha1
+    labels:
+      cluster: test
+    ports:
+    - 8080
+    - 9080
+    command: dgraph alpha --whitelist 0.0.0.0/0  --my=alpha2:7080 --lru_mb=1024 --zero=zero1:5080 --logtostderr
+      -v=2 --idx=2
+  alpha3:
+    image: dgraph/dgraph:latest
+    hostname: alpha3
+    ports:
+    - 8080
+    - 9080
+    command: dgraph alpha --whitelist 0.0.0.0/0 --my=alpha3:7080 --lru_mb=1024 --zero=zero1:5080 --logtostderr
+      -v=2 --idx=3
+  zero1:
+    image: dgraph/dgraph:latest
+    hostname: zero1
+    ports:
+    - 5080
+    - 6080
+    command: dgraph zero --idx=1 --my=zero1:5080 --replicas=3 --logtostderr -v=2
+      --bindall
+  zero2:
+    image: dgraph/dgraph:latest
+    hostname: zero2
+    ports:
+    - 5080
+    - 6080
+    command: dgraph zero --idx=2 --my=zero2:5080 --replicas=3 --logtostderr -v=2
+      --peer=zero1:5080
+  zero3:
+    image: dgraph/dgraph:latest
+    hostname: zero3
+    ports:
+    - 5080
+    - 6080
+    command: dgraph zero --idx=3 --my=zero3:5080 --replicas=3 --logtostderr -v=2
+      --peer=zero1:5080
+volumes: {}

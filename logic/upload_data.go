@@ -9,34 +9,32 @@ import (
 
 //Struct for the query response
 type Resp struct {
-    Query []string `json:"query"`
+    Date string `json:"date"`
+}
+
+type RespArray struct {
+  Query []Resp `json:"query"`
 }
 
 //Main function that handles the whole process of uploading the data of a given day
 func UploadData(db *dgo.Dgraph, date string) bool{
   res := database.CheckDate(db, date)
   res_string := fmt.Sprintf("%s\n", res.Json)
-  fmt.Println(res_string)
-  var resp []Resp
+
+  var resp RespArray
 	json.Unmarshal([]byte(res_string), &resp)
-  //The data has to be uploaded
-  if resp == nil {
+
+
+  //The data has to be uploaded, because hasn't been uploaded
+  //UploadProducts(db, date)
+  //UploadBuyers(db, date)
+  UploadTransactions(db, date)
+  /*if len(resp.Query) == 0 {
+    UploadTransactions(db, date)
     database.AddUploadDate(db, date)
     return true
     //or false
-  }
+  }*/
 
   return false
-}
-
-func UploadBuyers(){
-
-}
-
-func UploadProducts(){
-
-}
-
-func UploadTransactions(){
-
 }
