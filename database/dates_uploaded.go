@@ -10,7 +10,7 @@ import (
 
 type Date struct {
   Uid   string   `json:"uid"`
-	Date  string   `json:"name,omitempty"`
+	Date  string   `json:"date,omitempty"`
 	DType []string `json:"dgraph.type,omitempty"`
 }
 
@@ -45,10 +45,18 @@ func CheckDate(db *dgo.Dgraph, date string) *api.Response  {
 }
 
 func AddUploadDate(db *dgo.Dgraph, date string){
-    date_struct := Person{
+
+    ctx := context.Background()
+
+    //Instance of a transaction
+    txn := db.NewTxn()
+    defer txn.Discard(ctx)
+
+    date_struct := Date{
     	Date:  date,
     	DType: []string{"Date"},
     }
+
     date_json, err := json.Marshal(date_struct)
     if err != nil {
     	log.Fatal(err)
@@ -57,7 +65,9 @@ func AddUploadDate(db *dgo.Dgraph, date string){
     mu := &api.Mutation{
     	SetJson: date_json,
     }
-    res, err := txn.Mutate(ctx, mu)
+    req := &api.Request{CommitNow:true, Mutations: []*api.Mutation{mu}}
+    res, err := txn.Do(ctx, req)
+    log.Printf("%s\n", res.Json)
     if err != nil {
 	     log.Fatal(err)
     }
