@@ -9,6 +9,7 @@ import (
   "net/http"
   "io/ioutil"
   "github.com/dgraph-io/dgo/v200"
+  "github.com/JaimeRamos99/prueba-truora-2/utils"
 )
 
 type Product struct {
@@ -23,27 +24,10 @@ type Transaction struct {
   Products []Product   `"json:products"`
 }
 
-//creates a map that contains the not splitable runes that are not letter
-//(the split rune is consired as a unicode digit...)
-func loopDigits() map[string]int{
-  //adding runes that are not digits
-  allowed_runes := map[string]int{
-    "#": 1,
-    ".": 1,
-    ",": 1,
-    "(": 1,
-    ")": 1,
-  }
-
-  //adding digits
-  for i := 0; i < 10; i++ {
-    allowed_runes[strconv.Itoa(i)] = 1
-  }
-  return allowed_runes
-}
-
+//Given a transaction string, this func converts it
+//into a valid Transaction struct
 func splitTransactions(tr string) Transaction{
-  allowed_runes := loopDigits()
+  allowed_runes := utils.loopDigits()
   acum := ""
 
   //creating a mirror string, except for the especial rune
@@ -107,11 +91,13 @@ func UploadTransactions(db *dgo.Dgraph, date string) bool{
 		log.Fatalln(err)
 	}
 
-  //parse de data in bytes format to string and split each transaction info by #
+  //parse de data in bytes format to string
+  //and split each transaction info by #
   input_str := string(bytes)
   transactionss := strings.Split(input_str,"#")
   transactions := transactionss[1:]
 
+  //Sending every transaction string, to get a valid transaction struct
   var trans []Transaction
   for _, tr := range transactions {
     tran := splitTransactions(tr)
