@@ -4,7 +4,6 @@ import (
   "fmt"
   "log"
   "strings"
-  "strconv"
   "unicode"
   "net/http"
   "io/ioutil"
@@ -27,7 +26,7 @@ type Transaction struct {
 //Given a transaction string, this func converts it
 //into a valid Transaction struct
 func splitTransactions(tr string) Transaction{
-  allowed_runes := utils.loopDigits()
+  allowed_runes := utils.LoopDigits()
   acum := ""
 
   //creating a mirror string, except for the especial rune
