@@ -1,6 +1,6 @@
 package structs
 
-type Product struct {
+type ProductId struct {
   ProductId string     `"json:productId"`
 }
 
@@ -9,5 +9,13 @@ type Transaction struct {
   BuyerId string       `"json:buyerId"`
   Ip string            `"json:ip"`
   Device string        `"json:device"`
-  Products []Product   `"json:products"`
+  Products []ProductId   `"json:products"`
+}
+
+func NewProductId(productId string) *ProductId {
+	return &ProductId{ ProductId: productId}
+}
+
+func NewTransaction(idTransaction string, buyerId string, ip string, device string, products []ProductId) *Transaction {
+	return &Transaction{IdTransaction: idTransaction, BuyerId: buyerId, Ip: ip, Device: device, Products: products}
 }

@@ -9,7 +9,7 @@ import (
   "io/ioutil"
   "github.com/dgraph-io/dgo/v200"
   "github.com/JaimeRamos99/prueba-truora-2/utils"
-  "github.com/JaimeRamos99/prueba-truora-2/structs"
+  "github.com/JaimeRamos99/prueba-truora-2/utils/structs"
 )
 
 //Given a transaction string, this func converts it
@@ -35,30 +35,21 @@ func splitTransactions(tr string) structs.Transaction{
   products  := strings.Split(tran_splitted[4][1:len_prods_str-1], ",")
 
   //Creating the Products array struct
-  var products_Array []structs.Product
+  var products_Array []structs.ProductId
   for _, product := range products {
-    prod := Product{
-      ProductId: product,
-    }
+    prod := *structs.NewProductId(product)
     products_Array = append(products_Array, prod)
   }
 
   //instance of Transaction
-  tran := structs.Transaction{
-    IdTransaction: tran_splitted[0],
-    BuyerId: tran_splitted[1],
-    Ip: tran_splitted[2],
-    Device: tran_splitted[3],
-    Products: products_Array,
-  }
-
+  tran := *structs.NewTransaction(tran_splitted[0], tran_splitted[1], tran_splitted[2], tran_splitted[3], products_Array)
   return tran
 }
 
 //Function that handles the process of insert a transaction into the db
 func UploadTransactions(db *dgo.Dgraph, date string) bool{
   //create the request
-  url_string := fmt.Sprintf(`https://kqxty15mpg.execute-api.us-east-1.amazonaws.com/[1]v?date=%[2]v`, "transactions", date)
+  url_string := fmt.Sprintf(utils.Base_url, "transactions", date)
   req, er := http.NewRequest("GET", url_string, nil)
   if er != nil {
     log.Fatal(er)
@@ -78,19 +69,20 @@ func UploadTransactions(db *dgo.Dgraph, date string) bool{
   bytes, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		log.Fatalln(err)
+    return false
 	}
 
   //parse de data in bytes format to string
   //and split each transaction info by #
   input_str := string(bytes)
-  transactionss := strings.Split(input_str,"#")
+  transactionss := strings.Split(input_str, "#")
   transactions := transactionss[1:]
 
   //Sending every transaction string, to get a valid transaction struct
   var trans []structs.Transaction
   for _, tr := range transactions {
-    tran := splitTransactions(tr)
-    trans = append(trans, tran)
+    trans = append(trans, splitTransactions(tr))
   }
+  fmt.Println(trans[0])
   return true
 }
