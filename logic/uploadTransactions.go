@@ -11,18 +11,6 @@ import (
   "github.com/JaimeRamos99/prueba-truora-2/utils"
 )
 
-type Product struct {
-  ProductId string     `"json:productId"`
-}
-
-type Transaction struct {
-  IdTransaction string `"json:idTransaction"`
-  BuyerId string       `"json:buyerId"`
-  Ip string            `"json:ip"`
-  Device string        `"json:device"`
-  Products []Product   `"json:products"`
-}
-
 //Given a transaction string, this func converts it
 //into a valid Transaction struct
 func splitTransactions(tr string) Transaction{
@@ -43,7 +31,7 @@ func splitTransactions(tr string) Transaction{
   //splitting transactions attrs
   tran_splitted := strings.Split(acum, "_")
   len_prods_str := len(tran_splitted[4])
-  products  := strings.Split(tran_splitted[4][1:len_prods_str-1],",")
+  products  := strings.Split(tran_splitted[4][1:len_prods_str-1], ",")
 
   //Creating the Products array struct
   var products_Array []Product
@@ -66,9 +54,10 @@ func splitTransactions(tr string) Transaction{
   return tran
 }
 
+//Function that handles the process of insert a transaction into the db
 func UploadTransactions(db *dgo.Dgraph, date string) bool{
   //create the request
-  url_string := fmt.Sprintf(`https://kqxty15mpg.execute-api.us-east-1.amazonaws.com/transactions?date=%v`, date)
+  url_string := fmt.Sprintf(`https://kqxty15mpg.execute-api.us-east-1.amazonaws.com/[1]v?date=%[2]v`, "transactions", date)
   req, er := http.NewRequest("GET", url_string, nil)
   if er != nil {
     log.Fatal(er)
