@@ -1,4 +1,4 @@
-package utils
+package structs
 
 type Product struct {
   ProductId string     `"json:productId"`

@@ -9,11 +9,12 @@ import (
   "io/ioutil"
   "github.com/dgraph-io/dgo/v200"
   "github.com/JaimeRamos99/prueba-truora-2/utils"
+  "github.com/JaimeRamos99/prueba-truora-2/structs"
 )
 
 //Given a transaction string, this func converts it
 //into a valid Transaction struct
-func splitTransactions(tr string) Transaction{
+func splitTransactions(tr string) structs.Transaction{
   allowed_runes := utils.LoopDigits()
   acum := ""
 
@@ -34,7 +35,7 @@ func splitTransactions(tr string) Transaction{
   products  := strings.Split(tran_splitted[4][1:len_prods_str-1], ",")
 
   //Creating the Products array struct
-  var products_Array []Product
+  var products_Array []structs.Product
   for _, product := range products {
     prod := Product{
       ProductId: product,
@@ -43,7 +44,7 @@ func splitTransactions(tr string) Transaction{
   }
 
   //instance of Transaction
-  tran := Transaction{
+  tran := structs.Transaction{
     IdTransaction: tran_splitted[0],
     BuyerId: tran_splitted[1],
     Ip: tran_splitted[2],
@@ -86,7 +87,7 @@ func UploadTransactions(db *dgo.Dgraph, date string) bool{
   transactions := transactionss[1:]
 
   //Sending every transaction string, to get a valid transaction struct
-  var trans []Transaction
+  var trans []structs.Transaction
   for _, tr := range transactions {
     tran := splitTransactions(tr)
     trans = append(trans, tran)
