@@ -2,6 +2,7 @@ package request_handlers
 
 import (
 	json "encoding/json"
+	fmt "fmt"
 	http "net/http"
 	regexp "regexp"
 	strconv "strconv"
@@ -46,7 +47,11 @@ func UploadHandler(db *dgo.Dgraph, w http.ResponseWriter, r *http.Request) {
 		//Valid date
 		res := logic.UploadData(db, strconv.FormatInt(unix_time_input, 10))
 		if res {
-			w.Write([]byte("The data was upload"))
+			w.Header().Set("Content-Type", "application/json")
+			w.WriteHeader(http.StatusCreated)
+			//w.Write([]byte("The data was upload"))
+			json.NewEncoder(w).Encode("The data was upload")
+			fmt.Print("ff")
 			return
 		}
 		w.Write([]byte("The data had already been uploaded"))

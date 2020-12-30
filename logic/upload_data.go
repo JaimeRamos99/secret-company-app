@@ -28,5 +28,5 @@ func UploadData(db *dgo.Dgraph, date string) bool {
 	  //or false
 	}*/
 
-	return false
+	return /*false*/ true
 }

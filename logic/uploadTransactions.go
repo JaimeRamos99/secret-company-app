@@ -84,6 +84,5 @@ func UploadTransactions(db *dgo.Dgraph, date string) bool {
 	for _, tr := range transactions {
 		trans = append(trans, splitTransactions(tr))
 	}
-	fmt.Println(trans[0])
 	return true
 }
