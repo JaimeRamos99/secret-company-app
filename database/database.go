@@ -1,11 +1,12 @@
 package database
 
 import (
-  "log"
-  "context"
-  "github.com/dgraph-io/dgo/v200"
-  "github.com/dgraph-io/dgo/v200/protos/api"
-  "google.golang.org/grpc"
+	context "context"
+	log "log"
+
+	dgo "github.com/dgraph-io/dgo/v200"
+	api "github.com/dgraph-io/dgo/v200/protos/api"
+	grpc "google.golang.org/grpc"
 )
 
 type CancelFunc func()
@@ -16,45 +17,44 @@ func NewClient() (*dgo.Dgraph, CancelFunc) {
 	if err != nil {
 		log.Fatal(err)
 	} else {
-    log.Print("Established connection")
-  }
-  dc := api.NewDgraphClient(conn)
-  dg := dgo.NewDgraphClient(dc)
+		log.Print("Established connection")
+	}
+	dc := api.NewDgraphClient(conn)
+	dg := dgo.NewDgraphClient(dc)
 
-  //Return a function to close the connection
+	//Return a function to close the connection
 	return dg, func() {
-      if err := conn.Close(); err != nil {
-        log.Printf("Error while closing connection:%v", err)
-      } else {
-        log.Println("Connection closed")
-      }
-    }
+		if err := conn.Close(); err != nil {
+			log.Printf("Error while closing connection:%v", err)
+		} else {
+			log.Println("Connection closed")
+		}
+	}
 }
 
 //Function that Drop all the schemas and data
-func DeleteAll(db *dgo.Dgraph){
-  op := api.Operation{DropAll: true}
-  ctx := context.Background()
-  if err := db.Alter(ctx, &op); err != nil {
-    log.Fatal(err)
-  }
+func DeleteAll(db *dgo.Dgraph) {
+	op := api.Operation{DropAll: true}
+	ctx := context.Background()
+	if err := db.Alter(ctx, &op); err != nil {
+		log.Fatal(err)
+	}
 }
 
 //Function that upserts the schema that tracks the dates that have been updated
-func CreateSchemaUploadedDates(db *dgo.Dgraph){
+func CreateSchemaUploadedDates(db *dgo.Dgraph) {
 
-  //Schema to create
-  op := api.Operation{
-    Schema:
-    `date: string @index(exact) .
+	//Schema to create
+	op := api.Operation{
+		Schema: `date: string @index(exact) .
      type UploadDate {
        date
      }
     `,
-  }
+	}
 
-  ctx := context.Background()
-  if err := db.Alter(ctx, &op); err != nil {
+	ctx := context.Background()
+	if err := db.Alter(ctx, &op); err != nil {
 		log.Fatal(err)
 	}
 }

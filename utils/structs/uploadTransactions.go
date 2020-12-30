@@ -1,19 +1,19 @@
 package structs
 
 type ProductId struct {
-  ProductId string     `"json:productId"`
+	ProductId string `json:"productId"`
 }
 
 type Transaction struct {
-  IdTransaction string `"json:idTransaction"`
-  BuyerId string       `"json:buyerId"`
-  Ip string            `"json:ip"`
-  Device string        `"json:device"`
-  Products []ProductId   `"json:products"`
+	IdTransaction string      `json:"idTransaction"`
+	BuyerId       string      `json:"buyerId"`
+	Ip            string      `json:"ip"`
+	Device        string      `json:"device"`
+	Products      []ProductId `json:"products"`
 }
 
 func NewProductId(productId string) *ProductId {
-	return &ProductId{ ProductId: productId}
+	return &ProductId{ProductId: productId}
 }
 
 func NewTransaction(idTransaction string, buyerId string, ip string, device string, products []ProductId) *Transaction {

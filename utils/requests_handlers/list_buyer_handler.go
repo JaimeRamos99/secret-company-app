@@ -1,5 +1,5 @@
 package request_handlers
 
-func ListBuyersHandler(){
+func ListBuyersHandler() {
 
 }
