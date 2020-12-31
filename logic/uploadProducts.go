@@ -64,7 +64,8 @@ func UploadProducts(db *dgo.Dgraph, date string) bool {
 			prods_array = append(prods_array, product)
 		}
 	}
-	GetAllProducts(db)
+	new_prods := NewProducts(prods_array, GetAllProducts(db))
+	fmt.Println(len(prods_array), len(new_prods))
 	/*mu := &api.Mutation{
 		CommitNow: true,
 	}
