@@ -15,6 +15,8 @@ import (
 
 func UploadProducts(db *dgo.Dgraph, date string) bool {
 
+	//ctx := context.Background()
+
 	//creating the request to fetch the resource
 	url_string := fmt.Sprintf(utils.Base_url, "products", date)
 	req, er := http.NewRequest("GET", url_string, nil)
@@ -62,5 +64,20 @@ func UploadProducts(db *dgo.Dgraph, date string) bool {
 			prods_array = append(prods_array, product)
 		}
 	}
+	GetAllProducts(db)
+	/*mu := &api.Mutation{
+		CommitNow: true,
+	}
+
+	products_json, error := json.Marshal(prods_array)
+	if error != nil {
+		log.Fatal(err)
+		return false
+	}
+	mu.SetJson = products_json
+	assigned, err := db.NewTxn().Mutate(ctx, mu)
+	if err != nil {
+		log.Fatal(err)
+	}*/
 	return true
 }
