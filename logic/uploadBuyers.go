@@ -13,6 +13,7 @@ import (
 
 func UploadBuyers(db *dgo.Dgraph, date string) bool {
 
+	//creating the request to fetch the resource
 	url_string := fmt.Sprintf(utils.Base_url, "buyers", date)
 	req, er := http.NewRequest("GET", url_string, nil)
 	if er != nil {
@@ -20,6 +21,7 @@ func UploadBuyers(db *dgo.Dgraph, date string) bool {
 		return false
 	}
 
+	//Commit the request
 	client := &http.Client{}
 	resp, err := client.Do(req)
 	if err != nil {
@@ -28,6 +30,7 @@ func UploadBuyers(db *dgo.Dgraph, date string) bool {
 	}
 	defer resp.Body.Close()
 
+	//decode json into the equivalent struct
 	var array_buyers []structs.Buyer
 	error := json.NewDecoder(resp.Body).Decode(&array_buyers)
 	if error != nil {
