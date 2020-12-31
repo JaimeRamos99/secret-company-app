@@ -67,7 +67,8 @@ func UploadProducts(db *dgo.Dgraph, date string) bool {
 			prods_array = append(prods_array, product)
 		}
 	}
-	new_prods := NewProducts(prods_array, GetAllProducts(db))
+	all_products_db := GetAllProducts(db)
+	new_prods := NewProducts(prods_array, all_products_db)
 	fmt.Println(len(prods_array), len(new_prods))
 	mu := &api.Mutation{
 		CommitNow: true,
@@ -84,6 +85,8 @@ func UploadProducts(db *dgo.Dgraph, date string) bool {
 		log.Fatal(err)
 		return false
 	}
-	fmt.Println(assigned)
+	for _, np := range new_prods {
+		all_products_db[assigned.Uids[np.Uid]] = np.Uid
+	}
 	return true
 }
