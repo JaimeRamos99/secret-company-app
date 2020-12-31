@@ -1,6 +1,8 @@
 package logic
 
 import (
+	context "context"
+	json "encoding/json"
 	fmt "fmt"
 	ioutil "io/ioutil"
 	log "log"
@@ -11,11 +13,12 @@ import (
 	utils "github.com/JaimeRamos99/prueba-truora-2/utils"
 	structs "github.com/JaimeRamos99/prueba-truora-2/utils/structs"
 	dgo "github.com/dgraph-io/dgo/v200"
+	api "github.com/dgraph-io/dgo/v200/protos/api"
 )
 
 func UploadProducts(db *dgo.Dgraph, date string) bool {
 
-	//ctx := context.Background()
+	ctx := context.Background()
 
 	//creating the request to fetch the resource
 	url_string := fmt.Sprintf(utils.Base_url, "products", date)
@@ -66,11 +69,11 @@ func UploadProducts(db *dgo.Dgraph, date string) bool {
 	}
 	new_prods := NewProducts(prods_array, GetAllProducts(db))
 	fmt.Println(len(prods_array), len(new_prods))
-	/*mu := &api.Mutation{
+	mu := &api.Mutation{
 		CommitNow: true,
 	}
 
-	products_json, error := json.Marshal(prods_array)
+	products_json, error := json.Marshal(new_prods)
 	if error != nil {
 		log.Fatal(err)
 		return false
@@ -79,6 +82,8 @@ func UploadProducts(db *dgo.Dgraph, date string) bool {
 	assigned, err := db.NewTxn().Mutate(ctx, mu)
 	if err != nil {
 		log.Fatal(err)
-	}*/
+		return false
+	}
+	fmt.Println(assigned)
 	return true
 }
