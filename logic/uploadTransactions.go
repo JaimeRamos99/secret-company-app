@@ -49,7 +49,7 @@ func splitTransactions(tr string) structs.Transaction {
 
 //Function that handles the process of insert a transaction into the db
 func UploadTransactions(db *dgo.Dgraph, date string) bool {
-	//create the request
+	//create the request, passing the /name and the date
 	url_string := fmt.Sprintf(utils.Base_url, "transactions", date)
 	req, er := http.NewRequest("GET", url_string, nil)
 	if er != nil {

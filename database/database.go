@@ -46,7 +46,7 @@ func CreateSchemaUploadedDates(db *dgo.Dgraph) {
 
 	//Schema to create
 	op := api.Operation{
-		Schema: `date: string @index(exact) .
+		Schema: `date: string @index(exact) @upsert .
      type UploadDate {
        date
      }

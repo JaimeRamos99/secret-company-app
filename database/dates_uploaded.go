@@ -10,7 +10,6 @@ import (
 )
 
 type Date struct {
-	Uid   string   `json:"uid"`
 	Date  string   `json:"date,omitempty"`
 	DType []string `json:"dgraph.type,omitempty"`
 }
