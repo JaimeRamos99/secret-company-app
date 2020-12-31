@@ -12,7 +12,6 @@ import (
 func init() {
 	//create dgraph schemas
 	db, close_conn := database.NewClient()
-	database.CreateSchemaUploadedDates(db)
 	database.CreateEntitiesSchemas(db)
 	defer close_conn()
 }

@@ -40,21 +40,3 @@ func DeleteAll(db *dgo.Dgraph) {
 		log.Fatal(err)
 	}
 }
-
-//Function that upserts the schema that tracks the dates that have been updated
-func CreateSchemaUploadedDates(db *dgo.Dgraph) {
-
-	//Schema to create
-	op := api.Operation{
-		Schema: `date: string @index(exact) @upsert .
-     type UploadDate {
-       date
-     }
-    `,
-	}
-
-	ctx := context.Background()
-	if err := db.Alter(ctx, &op); err != nil {
-		log.Fatal(err)
-	}
-}
