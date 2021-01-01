@@ -67,24 +67,30 @@ func UploadProducts(db *dgo.Dgraph, date string) bool {
 			prods_array = append(prods_array, product)
 		}
 	}
+	//get all the products in the db and determine
+	//which of the products of the given day
 	all_products_db := GetAllProducts(db)
 	new_prods := NewProducts(prods_array, all_products_db)
-	fmt.Println(len(prods_array), len(new_prods))
-	mu := &api.Mutation{
-		CommitNow: true,
-	}
 
+	//parse products struct to json format (accepted by dgraph)
 	products_json, error := json.Marshal(new_prods)
 	if error != nil {
 		log.Fatal(err)
 		return false
 	}
+
+	//creating a mutation transaction
+	mu := &api.Mutation{
+		CommitNow: true,
+	}
 	mu.SetJson = products_json
+	//the assigned.Uids is a map[_:productId][uid] for the uploaded data
 	assigned, err := db.NewTxn().Mutate(ctx, mu)
 	if err != nil {
 		log.Fatal(err)
 		return false
 	}
+	//adding the new loaded products to the map that contains all of them
 	for _, np := range new_prods {
 		all_products_db[assigned.Uids[np.Uid]] = np.Uid
 	}

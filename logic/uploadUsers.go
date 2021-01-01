@@ -11,7 +11,7 @@ import (
 	dgo "github.com/dgraph-io/dgo/v200"
 )
 
-func UploadBuyers(db *dgo.Dgraph, date string) bool {
+func UploadUsers(db *dgo.Dgraph, date string) bool {
 
 	//creating the request to fetch the resource
 	url_string := fmt.Sprintf(utils.Base_url, "buyers", date)
@@ -37,5 +37,7 @@ func UploadBuyers(db *dgo.Dgraph, date string) bool {
 		log.Fatal(error)
 		return false
 	}
+	all_users_db := GetAllUsers(db)
+	fmt.Println(all_users_db)
 	return true
 }
