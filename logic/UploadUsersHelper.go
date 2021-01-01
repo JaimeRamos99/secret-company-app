@@ -30,12 +30,12 @@ func GetAllUsers(db *dgo.Dgraph) map[string]string {
 
 }
 
-func NewUsers(prods_day []structs.Product, prods_db map[string]string) []structs.Product {
-	var new_prods []structs.Product
-	for _, prod := range prods_day {
-		if _, ok := prods_db[prod.ProductID]; !ok {
-			new_prods = append(new_prods, prod)
+func NewUsers(users_day structs.Users, users_db map[string]string) structs.Users {
+	var new_users structs.Users
+	for _, usr := range users_day.Users {
+		if _, ok := users_db[usr.UserId]; !ok {
+			new_users.Users = append(new_users.Users, usr)
 		}
 	}
-	return new_prods
+	return new_users
 }

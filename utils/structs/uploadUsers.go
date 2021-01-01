@@ -9,8 +9,8 @@ type Buyer struct {
 type User struct {
 	Uid    string `json:"uid,omitempty"`
 	UserId string `json:"userId,omitempty"`
-	Name   string `json:"name,omitempty"`
-	Age    int    `json:"age,omitempty"`
+	Name   string `json:"userName,omitempty"`
+	Age    int    `json:"userAge,omitempty"`
 }
 
 type Users struct {

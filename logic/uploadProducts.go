@@ -73,9 +73,9 @@ func UploadProducts(db *dgo.Dgraph, date string) bool {
 	new_prods := NewProducts(prods_array, all_products_db)
 
 	//parse products struct to json format (accepted by dgraph)
-	products_json, error := json.Marshal(new_prods)
-	if error != nil {
-		log.Fatal(err)
+	products_json, errorr := json.Marshal(new_prods)
+	if errorr != nil {
+		log.Fatal(errorr)
 		return false
 	}
 
@@ -85,9 +85,9 @@ func UploadProducts(db *dgo.Dgraph, date string) bool {
 	}
 	mu.SetJson = products_json
 	//the assigned.Uids is a map[_:productId][uid] for the uploaded data
-	assigned, err := db.NewTxn().Mutate(ctx, mu)
-	if err != nil {
-		log.Fatal(err)
+	assigned, e := db.NewTxn().Mutate(ctx, mu)
+	if e != nil {
+		log.Fatal(e)
 		return false
 	}
 	//adding the new loaded products to the map that contains all of them
