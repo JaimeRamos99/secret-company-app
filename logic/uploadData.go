@@ -20,9 +20,10 @@ func UploadData(db *dgo.Dgraph, date string) bool {
 	//The data has to be uploaded, because hasn't been uploaded
 
 	//if len(resp.Query) == 0 {
-	UploadUsers(db, date)
-	//UploadProducts(db, date)
-	//UploadTransactions(db, date)
+	usr_map := UploadUsers(db, date)
+	prods_map := UploadProducts(db, date)
+	HandleTransactions(db, date, usr_map, prods_map)
+
 	//database.AddUploadDate(db, date)
 	//return true
 	//or false

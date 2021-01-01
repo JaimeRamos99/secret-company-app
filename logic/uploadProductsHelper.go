@@ -3,11 +3,42 @@ package logic
 import (
 	json "encoding/json"
 	fmt "fmt"
+	strconv "strconv"
+	strings "strings"
 
 	database "github.com/JaimeRamos99/prueba-truora-2/database"
 	structs "github.com/JaimeRamos99/prueba-truora-2/utils/structs"
 	dgo "github.com/dgraph-io/dgo/v200"
 )
+
+//parse array of bytes that contains the products of the given day to an array os structs
+func ProductsDecoder(bytes []byte) []structs.Product {
+
+	//parse de data in bytes format to string
+	//and split each transaction info by \n
+	input_str := string(bytes)
+	products_array_string := strings.Split(input_str, "\n")
+
+	//for each product string, the attributes are applited by '
+	//then a struct is created with those attrs
+	var prods_array []structs.Product
+	for _, pr := range products_array_string {
+		//The last line of the response is empty
+		if len(pr) > 0 {
+			attr_prods := strings.Split(pr, "'")
+			product_id := attr_prods[0]
+			product_name := attr_prods[1]
+			price, errorr := strconv.Atoi(attr_prods[2])
+			if errorr != nil {
+				price = 0
+			}
+			//create a product struct with the attrs
+			product := *structs.NewProduct(product_id, product_name, price)
+			prods_array = append(prods_array, product)
+		}
+	}
+	return prods_array
+}
 
 //get all products from the db
 func GetAllProducts(db *dgo.Dgraph) map[string]string {

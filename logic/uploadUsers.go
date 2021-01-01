@@ -13,7 +13,7 @@ import (
 	api "github.com/dgraph-io/dgo/v200/protos/api"
 )
 
-func UploadUsers(db *dgo.Dgraph, date string) bool {
+func UploadUsers(db *dgo.Dgraph, date string) map[string]string {
 
 	ctx := context.Background()
 
@@ -22,7 +22,6 @@ func UploadUsers(db *dgo.Dgraph, date string) bool {
 	req, er := http.NewRequest("GET", url_string, nil)
 	if er != nil {
 		log.Fatal(er)
-		return false
 	}
 
 	//Commit the request
@@ -30,7 +29,6 @@ func UploadUsers(db *dgo.Dgraph, date string) bool {
 	resp, err := client.Do(req)
 	if err != nil {
 		log.Fatal(err)
-		return false
 	}
 	defer resp.Body.Close()
 
@@ -39,7 +37,6 @@ func UploadUsers(db *dgo.Dgraph, date string) bool {
 	error := json.NewDecoder(resp.Body).Decode(&array_buyers)
 	if error != nil {
 		log.Fatal(error)
-		return false
 	}
 
 	//parse input obj format to a better to handle one
@@ -55,7 +52,6 @@ func UploadUsers(db *dgo.Dgraph, date string) bool {
 	users_json, errorr := json.Marshal(new_users.Users)
 	if errorr != nil {
 		log.Fatal(errorr)
-		return false
 	}
 
 	//mutation object for dgo
@@ -68,12 +64,11 @@ func UploadUsers(db *dgo.Dgraph, date string) bool {
 	assigned, err := db.NewTxn().Mutate(ctx, mu)
 	if err != nil {
 		log.Fatal(err)
-		return false
 	}
+
 	//adding the new loaded products to the map that contains all of them
 	for _, nu := range new_users.Users {
 		all_users_db[assigned.Uids[nu.Uid]] = nu.Uid
 	}
-	fmt.Println(len(new_users.Users), len(array_buyers))
-	return true
+	return all_users_db
 }

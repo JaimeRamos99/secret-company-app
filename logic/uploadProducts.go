@@ -7,16 +7,13 @@ import (
 	ioutil "io/ioutil"
 	log "log"
 	http "net/http"
-	strconv "strconv"
-	strings "strings"
 
 	utils "github.com/JaimeRamos99/prueba-truora-2/utils"
-	structs "github.com/JaimeRamos99/prueba-truora-2/utils/structs"
 	dgo "github.com/dgraph-io/dgo/v200"
 	api "github.com/dgraph-io/dgo/v200/protos/api"
 )
 
-func UploadProducts(db *dgo.Dgraph, date string) bool {
+func UploadProducts(db *dgo.Dgraph, date string) map[string]string {
 
 	ctx := context.Background()
 
@@ -25,7 +22,6 @@ func UploadProducts(db *dgo.Dgraph, date string) bool {
 	req, er := http.NewRequest("GET", url_string, nil)
 	if er != nil {
 		log.Fatal(er)
-		return false
 	}
 
 	//Commit the request
@@ -33,7 +29,6 @@ func UploadProducts(db *dgo.Dgraph, date string) bool {
 	resp, err := client.Do(req)
 	if err != nil {
 		log.Fatal(err)
-		return false
 	}
 	defer resp.Body.Close()
 
@@ -41,32 +36,11 @@ func UploadProducts(db *dgo.Dgraph, date string) bool {
 	bytes, erro := ioutil.ReadAll(resp.Body)
 	if erro != nil {
 		log.Fatalln(erro)
-		return false
 	}
 
-	//parse de data in bytes format to string
-	//and split each transaction info by \n
-	input_str := string(bytes)
-	products_array_string := strings.Split(input_str, "\n")
+	//receivs an stuc array
+	prods_array := ProductsDecoder(bytes)
 
-	//for each product string, the attributes are applited by '
-	//then a struct is created with those attrs
-	var prods_array []structs.Product
-	for _, pr := range products_array_string {
-		//The last line of the response is empty
-		if len(pr) > 0 {
-			attr_prods := strings.Split(pr, "'")
-			product_id := attr_prods[0]
-			product_name := attr_prods[1]
-			price, errorr := strconv.Atoi(attr_prods[2])
-			if errorr != nil {
-				price = 0
-			}
-			//create a product struct with the attrs
-			product := *structs.NewProduct(product_id, product_name, price)
-			prods_array = append(prods_array, product)
-		}
-	}
 	//get all the products in the db and determine
 	//which of the products of the given day
 	all_products_db := GetAllProducts(db)
@@ -76,7 +50,6 @@ func UploadProducts(db *dgo.Dgraph, date string) bool {
 	products_json, errorr := json.Marshal(new_prods)
 	if errorr != nil {
 		log.Fatal(errorr)
-		return false
 	}
 
 	//creating a mutation transaction
@@ -88,11 +61,10 @@ func UploadProducts(db *dgo.Dgraph, date string) bool {
 	assigned, e := db.NewTxn().Mutate(ctx, mu)
 	if e != nil {
 		log.Fatal(e)
-		return false
 	}
 	//adding the new loaded products to the map that contains all of them
 	for _, np := range new_prods {
 		all_products_db[assigned.Uids[np.Uid]] = np.Uid
 	}
-	return true
+	return all_products_db
 }
