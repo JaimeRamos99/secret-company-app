@@ -26,13 +26,14 @@ func Recommendation(db *dgo.Dgraph) *api.Response {
 			
 			var(func: uid(TR)){
 			  includes {
-				conteo as contar: count(~includes)
+				score as count: count(~includes)
 			  }
 			}
 			
-			third_stage(func: uid(TR)){
-			  includes(orderdesc: val(conteo), first:1) {
-				conteo: count(~includes)
+			result(func: uid(TR)){
+			  includes(orderdesc: val(score), first:3) {
+				productName
+				score: count(~includes)
 			  }
 			}
 		  }

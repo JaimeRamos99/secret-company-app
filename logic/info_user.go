@@ -27,7 +27,12 @@ func UserInfo(db *dgo.Dgraph, userId string) {
 	json.Unmarshal([]byte(same_ips_json), &same_ips)
 
 	//parse the bd response of the recommendation to struct
-	//resp_recommendation := database.Recommendation(db)
-	//recommendation_json := fmt.Sprintf("%s\n", resp_recommendation.Json)
-	//fmt.Println(recommendation_json)
+	resp_recommendation := database.Recommendation(db)
+	recommendation_json := fmt.Sprintf("%s\n", resp_recommendation.Json)
+
+	//
+	var recommendations *structs.Result
+	json.Unmarshal([]byte(recommendation_json), &recommendations)
+	fmt.Println(recommendations)
+
 }
