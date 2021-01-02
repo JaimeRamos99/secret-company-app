@@ -10,6 +10,9 @@ import (
 
 //Function that upserts the schemas
 func CreateEntitiesSchemas(db *dgo.Dgraph) {
+	//first delete other schemas and data
+	DeleteAll(db)
+
 	//Schemas to create
 	op := api.Operation{
 		Schema: `
@@ -22,7 +25,7 @@ func CreateEntitiesSchemas(db *dgo.Dgraph) {
 				 userId: string @index(exact) .
 				 userName: string .
 				 userAge: int .
-				 make: [uid] .
+				 madeBy: [uid] .
 
 				 transactionId: string @index(exact) .
 				 ip: string @index(exact) .
@@ -45,10 +48,10 @@ func CreateEntitiesSchemas(db *dgo.Dgraph) {
 					userId
 					userName
 					userAge
-					make
 				 }
 				 
 				 type Transaction {
+					 madeBy
 					 transactionId
 					 ip
 					 os

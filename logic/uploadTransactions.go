@@ -1,54 +1,23 @@
 package logic
 
 import (
+	context "context"
 	fmt "fmt"
 	ioutil "io/ioutil"
 	log "log"
 	http "net/http"
 	strings "strings"
-	unicode "unicode"
 
 	utils "github.com/JaimeRamos99/prueba-truora-2/utils"
 	structs "github.com/JaimeRamos99/prueba-truora-2/utils/structs"
 	dgo "github.com/dgraph-io/dgo/v200"
+	api "github.com/dgraph-io/dgo/v200/protos/api"
 )
-
-//Given a transaction string, this func converts it
-//into a valid Transaction struct
-func splitTransactions(tr string) structs.Transaction {
-	allowed_runes := utils.LoopDigits()
-	acum := ""
-
-	//creating a mirror string, except for the especial rune
-	//instead a _ is added, in order to split later
-	for _, rune := range tr {
-		_, is_digit_or_special := allowed_runes[string(rune)]
-		if unicode.IsLetter(rune) || is_digit_or_special {
-			acum = acum + string(rune)
-		} else {
-			acum = acum + "_"
-		}
-	}
-
-	//splitting transactions attrs
-	tran_splitted := strings.Split(acum, "_")
-	len_prods_str := len(tran_splitted[4])
-	products := strings.Split(tran_splitted[4][1:len_prods_str-1], ",")
-
-	//Creating the Products array struct
-	var products_Array []structs.ProductId
-	for _, product := range products {
-		prod := *structs.NewProductId(product)
-		products_Array = append(products_Array, prod)
-	}
-
-	//instance of Transaction
-	tran := *structs.NewTransaction(tran_splitted[0], tran_splitted[1], tran_splitted[2], tran_splitted[3], products_Array)
-	return tran
-}
 
 //Function that handles the process of insert a transaction into the db
 func HandleTransactions(db *dgo.Dgraph, date string, usrs_map map[string]string, prods_map map[string]string) bool {
+
+	ctx := context.Background()
 	//create the request, passing the /name and the date
 	url_string := fmt.Sprintf(utils.Base_url, "transactions", date)
 	req, er := http.NewRequest("GET", url_string, nil)
@@ -83,6 +52,19 @@ func HandleTransactions(db *dgo.Dgraph, date string, usrs_map map[string]string,
 	var trans []structs.Transaction
 	for _, tr := range transactions {
 		trans = append(trans, splitTransactions(tr))
+	}
+
+	transactions_json := CreateTransactionJson(trans, usrs_map, prods_map)
+
+	//creating a mutation transaction
+	mu := &api.Mutation{
+		CommitNow: true,
+	}
+	mu.SetJson = transactions_json
+
+	_, e := db.NewTxn().Mutate(ctx, mu)
+	if e != nil {
+		log.Fatal(e)
 	}
 	return true
 }

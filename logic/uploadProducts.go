@@ -64,7 +64,7 @@ func UploadProducts(db *dgo.Dgraph, date string) map[string]string {
 	}
 	//adding the new loaded products to the map that contains all of them
 	for _, np := range new_prods {
-		all_products_db[assigned.Uids[np.Uid]] = np.Uid
+		all_products_db[np.ProductID] = assigned.Uids[np.ProductID]
 	}
 	return all_products_db
 }

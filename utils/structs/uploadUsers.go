@@ -18,9 +18,18 @@ type Users struct {
 }
 
 func NewBuyer(id string, name string, age int) *Buyer {
-	return &Buyer{Id: id, Name: name, Age: age}
+	return &Buyer{
+		Id:   id,
+		Name: name,
+		Age:  age,
+	}
 }
 
 func NewUser(userId string, name string, age int) *User {
-	return &User{Uid: "_:" + userId, UserId: userId, Name: name, Age: age}
+	return &User{
+		Uid:    "_:" + userId,
+		UserId: userId,
+		Name:   name,
+		Age:    age,
+	}
 }

@@ -32,9 +32,9 @@ func NewClient() (*dgo.Dgraph, CancelFunc) {
 	}
 }
 
-//Function that Drop all the schemas and data
+//Function that Drop all the data
 func DeleteAll(db *dgo.Dgraph) {
-	op := api.Operation{DropAll: true}
+	op := api.Operation{DropOp: api.Operation_ALL}
 	ctx := context.Background()
 	if err := db.Alter(ctx, &op); err != nil {
 		log.Fatal(err)
