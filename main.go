@@ -34,6 +34,14 @@ func main() {
 		request_handlers.UploadHandler(db, w, r)
 	})
 
+	r.Get("/users", func(w http.ResponseWriter, r *http.Request) {
+		request_handlers.ListBuyersHandler(db, w, r)
+	})
+
+	r.Get("/user_info", func(w http.ResponseWriter, r *http.Request) {
+		request_handlers.ListBuyersHandler(db, w, r)
+	})
+
 	//service listening on port 3000
 	http.ListenAndServe(":3000", r)
 }

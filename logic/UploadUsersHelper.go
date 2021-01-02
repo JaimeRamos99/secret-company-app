@@ -11,7 +11,7 @@ import (
 
 func GetAllUsers(db *dgo.Dgraph) map[string]string {
 	//call db package to query all the products
-	res := database.GetAllUsers(db)
+	res := database.GetAllUsers(db, false)
 	//Parse the response to json
 	res_json := fmt.Sprintf("%s\n", res.Json)
 

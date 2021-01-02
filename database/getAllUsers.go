@@ -8,7 +8,7 @@ import (
 	api "github.com/dgraph-io/dgo/v200/protos/api"
 )
 
-func GetAllUsers(db *dgo.Dgraph) *api.Response {
+func GetAllUsers(db *dgo.Dgraph, expanded bool) *api.Response {
 	ctx := context.Background()
 
 	//Instance of a transaction
@@ -16,14 +16,27 @@ func GetAllUsers(db *dgo.Dgraph) *api.Response {
 	defer txn.Discard(ctx)
 
 	//Looking in the DB if the data for that date has been uploaded
-	query :=
-		`{
+	query := ``
+	if expanded {
+		query =
+			`{
+		 	users(func:has(userId)){
+				 userId
+				 userName
+				 userAge
+			}
+		 }
+	    `
+	} else {
+		query =
+			`{
 		 	users(func:has(userId)){
 				 uid
 				 userId
 			}
 		 }
 	    `
+	}
 
 	req := &api.Request{
 		Query: query,
