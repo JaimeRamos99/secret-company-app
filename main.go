@@ -1,9 +1,13 @@
 package main
 
 import (
+	"log"
 	http "net/http"
+	time "time"
 
 	database "github.com/JaimeRamos99/prueba-truora-2/database"
+	logic "github.com/JaimeRamos99/prueba-truora-2/logic"
+	utils "github.com/JaimeRamos99/prueba-truora-2/utils"
 	request_handlers "github.com/JaimeRamos99/prueba-truora-2/utils/requests_handlers"
 	chi "github.com/go-chi/chi"
 	middleware "github.com/go-chi/chi/middleware"
@@ -13,6 +17,10 @@ func init() {
 	//create dgraph schemas
 	db, close_conn := database.NewClient()
 	database.CreateEntitiesSchemas(db)
+	now := time.Now()
+	date := now.Format(utils.LayoutISO)
+	logic.UploadData(db, date)
+	log.Print("Today's data loaded succesfully")
 	defer close_conn()
 }
 

@@ -13,7 +13,6 @@ import (
 func UploadData(db *dgo.Dgraph, date string) bool {
 	res := database.CheckDate(db, date)
 	res_string := fmt.Sprintf("%s\n", res.Json)
-
 	var resp *structs.RespArray
 	json.Unmarshal([]byte(res_string), &resp)
 

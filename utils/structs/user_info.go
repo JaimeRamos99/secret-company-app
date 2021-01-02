@@ -22,6 +22,7 @@ type Info struct {
 	UserName     string             `json:"userName,omitempty"`
 	Transactions []TransactionsResp `json:"transactions,omitempty"`
 }
+
 type InfoArray struct {
 	InfoArray []Info `json:"info,omitempty"`
 }

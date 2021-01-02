@@ -8,16 +8,13 @@ import (
 	time "time"
 
 	logic "github.com/JaimeRamos99/prueba-truora-2/logic"
+	utils "github.com/JaimeRamos99/prueba-truora-2/utils"
 	dgo "github.com/dgraph-io/dgo/v200"
 )
 
 type InputDate struct {
 	Date string `json:"date"`
 }
-
-const (
-	layoutISO = "2006-01-02"
-)
 
 func UploadHandler(db *dgo.Dgraph, w http.ResponseWriter, r *http.Request) {
 	var input_date InputDate
@@ -29,7 +26,7 @@ func UploadHandler(db *dgo.Dgraph, w http.ResponseWriter, r *http.Request) {
 	//Checking if the Body param 'date' meets the expected format
 	if match {
 		//Parsing the input date string to the desired time format
-		parsed_time, err := time.Parse(layoutISO, input_date.Date)
+		parsed_time, err := time.Parse(utils.LayoutISO, input_date.Date)
 		if err != nil {
 			w.Write([]byte("Invalid date"))
 			return

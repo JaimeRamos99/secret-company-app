@@ -12,7 +12,7 @@ import (
 type CancelFunc func()
 
 func NewClient() (*dgo.Dgraph, CancelFunc) {
-	// Dial a gRPC connection.
+	// dial a gRPC connection.
 	conn, err := grpc.Dial("localhost:9080", grpc.WithInsecure())
 	if err != nil {
 		log.Fatal(err)
@@ -22,7 +22,7 @@ func NewClient() (*dgo.Dgraph, CancelFunc) {
 	dc := api.NewDgraphClient(conn)
 	dg := dgo.NewDgraphClient(dc)
 
-	//Return a function to close the connection
+	// return a function to close the connection
 	return dg, func() {
 		if err := conn.Close(); err != nil {
 			log.Printf("Error while closing connection:%v", err)
@@ -32,7 +32,7 @@ func NewClient() (*dgo.Dgraph, CancelFunc) {
 	}
 }
 
-//Function that Drop all the data
+// function that Drop all the data
 func DeleteAll(db *dgo.Dgraph) {
 	op := api.Operation{DropOp: api.Operation_ALL}
 	ctx := context.Background()

@@ -18,8 +18,7 @@ func Same_ips(db *dgo.Dgraph, user_id string) *api.Response {
 	//Looking in the DB if the data for that date has been uploaded
 	query :=
 		`
-		{
-			query all($user_id: string){
+			query SameIps($user_id: string){
 				first_stage(func:eq(userId, $user_id)) {
 					~madeBy{
 						ips as ip
@@ -35,7 +34,6 @@ func Same_ips(db *dgo.Dgraph, user_id string) *api.Response {
 					}
 			    }
 			}
-		}
    		`
 
 	req := &api.Request{

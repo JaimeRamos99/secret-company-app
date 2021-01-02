@@ -30,7 +30,7 @@ func CreateEntitiesSchemas(db *dgo.Dgraph) {
 				 transactionId: string @index(exact) .
 				 ip: string @index(exact) .
 				 os: string .
-				 includes: [uid] .
+				 includes: [uid] @reverse .
 
 
 
