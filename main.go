@@ -38,8 +38,14 @@ func main() {
 		request_handlers.ListBuyersHandler(db, w, r)
 	})
 
-	r.Get("/user_info", func(w http.ResponseWriter, r *http.Request) {
-		request_handlers.ListBuyersHandler(db, w, r)
+	r.Route("/user_info", func(r chi.Router) {
+
+		// Subrouter
+		r.Route("/{userId}", func(r chi.Router) {
+			r.Get("/", func(w http.ResponseWriter, r *http.Request) {
+				request_handlers.GetUserInfo(db, w, r)
+			})
+		})
 	})
 
 	//service listening on port 3000

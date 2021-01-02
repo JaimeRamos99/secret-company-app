@@ -5,14 +5,10 @@ import (
 	json "encoding/json"
 	log "log"
 
+	structs "github.com/JaimeRamos99/prueba-truora-2/utils/structs"
 	dgo "github.com/dgraph-io/dgo/v200"
 	api "github.com/dgraph-io/dgo/v200/protos/api"
 )
-
-type Date struct {
-	Date  string   `json:"date,omitempty"`
-	DType []string `json:"dgraph.type,omitempty"`
-}
 
 func CheckDate(db *dgo.Dgraph, date string) *api.Response {
 
@@ -24,11 +20,13 @@ func CheckDate(db *dgo.Dgraph, date string) *api.Response {
 
 	//Looking in the DB if the data for that date has been uploaded
 	query :=
-		`query all($input: string) {
-      query(func: eq(date, $input)){
-        date
-      }
-   }`
+		`
+		 query all($input: string) {
+      		query(func: eq(date, $input)){
+        		date
+      		}
+   		 }
+   		`
 
 	req := &api.Request{
 		Query: query,
@@ -53,7 +51,7 @@ func AddUploadDate(db *dgo.Dgraph, date string) {
 	defer txn.Discard(ctx)
 
 	//Struct instance
-	date_struct := Date{
+	date_struct := structs.Date{
 		Date:  date,
 		DType: []string{"Date"},
 	}

@@ -4,7 +4,7 @@ type Product struct {
 	Uid         string `json:"uid,omitempty"`
 	ProductID   string `json:"productId,omitempty"`
 	ProductName string `json:"productName,omitempty"`
-	Price       int    `json:"Productprice,omitempty"`
+	Price       int    `json:"productPrice,omitempty"`
 }
 
 func NewProduct(productID string, productName string, price int) *Product {
