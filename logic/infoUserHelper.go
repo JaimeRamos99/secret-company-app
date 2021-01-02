@@ -1,12 +1,10 @@
 package logic
 
 import (
-	"fmt"
-
 	structs "github.com/JaimeRamos99/prueba-truora-2/utils/structs"
 )
 
-func ThreeBestSellers(trans *structs.Result) {
+func ThreeBestSellers(trans *structs.Result) []structs.TopProduct {
 	first_score, second_score, third_score := 0, 0, 0
 	first_name, second_name, third_name := "", "", ""
 	unique_products := make(map[string]int)
@@ -33,7 +31,12 @@ func ThreeBestSellers(trans *structs.Result) {
 			}
 		}
 	}
-	fmt.Println("1. ", first_name, first_score)
-	fmt.Println("2. ", second_name, second_score)
-	fmt.Println("3. ", third_name, third_score)
+	var podium []structs.TopProduct
+	first := *structs.NewTopProduct(first_name, first_score)
+	second := *structs.NewTopProduct(second_name, second_score)
+	third := *structs.NewTopProduct(third_name, third_score)
+	podium = append(podium, first)
+	podium = append(podium, second)
+	podium = append(podium, third)
+	return podium
 }

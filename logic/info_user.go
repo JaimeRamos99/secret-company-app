@@ -9,8 +9,9 @@ import (
 	dgo "github.com/dgraph-io/dgo/v200"
 )
 
-func UserInfo(db *dgo.Dgraph, userId string) {
-	//
+func UserInfo(db *dgo.Dgraph, userId string) *structs.AllUserInfo {
+
+	//parse the bd response for other users using the same ip of a given user
 	resp_general_info := database.User_general_info(db, userId)
 	general_info_json := fmt.Sprintf("%s\n", resp_general_info.Json)
 
@@ -33,5 +34,11 @@ func UserInfo(db *dgo.Dgraph, userId string) {
 	//create a struct for the recommedation response
 	var recommendations *structs.Result
 	json.Unmarshal([]byte(recommendation_json), &recommendations)
-	ThreeBestSellers(recommendations)
+
+	//top three products
+	recommended_products := ThreeBestSellers(recommendations)
+
+	//all the info asked in the test together
+	all_info := structs.NewAllUserInfo(general_info, same_ips, recommended_products)
+	return all_info
 }

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"log"
+	log "log"
 	http "net/http"
 	time "time"
 
@@ -47,7 +47,6 @@ func main() {
 	})
 
 	r.Route("/user_info", func(r chi.Router) {
-
 		// Subrouter
 		r.Route("/{userId}", func(r chi.Router) {
 			r.Get("/", func(w http.ResponseWriter, r *http.Request) {
