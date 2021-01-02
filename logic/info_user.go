@@ -30,9 +30,8 @@ func UserInfo(db *dgo.Dgraph, userId string) {
 	resp_recommendation := database.Recommendation(db)
 	recommendation_json := fmt.Sprintf("%s\n", resp_recommendation.Json)
 
-	//
+	//create a struct for the recommedation response
 	var recommendations *structs.Result
 	json.Unmarshal([]byte(recommendation_json), &recommendations)
-	fmt.Println(recommendations)
-
+	ThreeBestSellers(recommendations)
 }
