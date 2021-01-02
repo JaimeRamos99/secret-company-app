@@ -20,6 +20,5 @@ type SecondStage struct {
 }
 
 type DataSameIps struct {
-	First    []FirstStage  `json:"first_stage,omitempty"`
 	StageTwo []SecondStage `json:"second_stage,omitempty"`
 }

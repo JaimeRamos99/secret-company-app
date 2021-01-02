@@ -19,7 +19,7 @@ func Same_ips(db *dgo.Dgraph, user_id string) *api.Response {
 	query :=
 		`
 			query SameIps($user_id: string){
-				first_stage(func:eq(userId, $user_id)) {
+				var(func:eq(userId, $user_id)) {
 					~madeBy{
 						ips as ip
 				    }

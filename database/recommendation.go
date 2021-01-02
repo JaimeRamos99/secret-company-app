@@ -20,11 +20,11 @@ func Recommendation(db *dgo.Dgraph) *api.Response {
 	query :=
 		`
 		{
-			first_stage(func:has(transactionId)) {
+			var(func:has(transactionId)) {
 				  TR as uid
 			  }
 			
-			second_stage(func: uid(TR)){
+			var(func: uid(TR)){
 			  includes {
 				conteo as contar: count(~includes)
 			  }
