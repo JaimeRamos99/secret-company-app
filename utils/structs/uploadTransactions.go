@@ -22,7 +22,7 @@ type ProductUid struct {
 }
 
 type TransactionMutation struct {
-	MadeBy        MadeBy       `json:"uid"`
+	MadeBy        MadeBy       `json:"madeBy"`
 	IdTransaction string       `json:"transactionId"`
 	Ip            string       `json:"ip"`
 	Device        string       `json:"device"`

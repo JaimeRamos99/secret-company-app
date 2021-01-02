@@ -25,7 +25,7 @@ func CreateEntitiesSchemas(db *dgo.Dgraph) {
 				 userId: string @index(exact) .
 				 userName: string .
 				 userAge: int .
-				 madeBy: [uid] .
+				 madeBy: [uid] @reverse .
 
 				 transactionId: string @index(exact) .
 				 ip: string @index(exact) .
