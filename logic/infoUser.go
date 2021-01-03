@@ -29,18 +29,29 @@ func UserInfo(db *dgo.Dgraph, rdb *redis.Client, userId string) *structs.AllUser
 	var same_ips *structs.DataSameIps
 	json.Unmarshal([]byte(same_ips_json), &same_ips)
 
-	//parse the bd response of the recommendation to struct
-	resp_recommendation := database.Recommendation(db)
-	recommendation_json := fmt.Sprintf("%s\n", resp_recommendation.Json)
+	cache_recommendation := cache.GetRecommendation(rdb)
 
-	//create a struct for the recommedation response
-	var recommendations *structs.Result
-	json.Unmarshal([]byte(recommendation_json), &recommendations)
+	var recommended_products []structs.TopProduct
 
-	//top three products
-	recommended_products := ThreeBestSellers(recommendations)
-	cache.SetRecommendation(rdb, recommended_products)
-	cache.GetRecommendation(rdb)
+	//there is a recommendation in the cache
+	if cache_recommendation != nil {
+
+		recommended_products = *cache_recommendation
+
+	} else { //there i no recommendation in the cache
+
+		//parse the bd response of the recommendation to struct
+		resp_recommendation := database.Recommendation(db)
+		recommendation_json := fmt.Sprintf("%s\n", resp_recommendation.Json)
+
+		//create a struct for the recommedation response
+		var recommendations *structs.Result
+		json.Unmarshal([]byte(recommendation_json), &recommendations)
+
+		//top three products
+		recommended_products = ThreeBestSellers(recommendations)
+		cache.SetRecommendation(rdb, recommended_products)
+	}
 
 	//all the info asked in the test together
 	all_info := structs.NewAllUserInfo(general_info, same_ips, recommended_products)

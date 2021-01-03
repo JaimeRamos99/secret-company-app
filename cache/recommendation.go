@@ -3,23 +3,24 @@ package cache
 import (
 	context "context"
 	json "encoding/json"
-	fmt "fmt"
 	time "time"
 
 	structs "github.com/JaimeRamos99/prueba-truora-2/utils/structs"
 	redis "github.com/go-redis/redis/v8"
 )
 
-func GetRecommendation(rdb *redis.Client) {
+func GetRecommendation(rdb *redis.Client) *[]structs.TopProduct {
 	ctx := context.Background()
 	recommendation_json, err := rdb.Get(ctx, "recommendation").Result()
 	if err != nil {
 		if err == redis.Nil {
-			fmt.Println("no está")
+			return nil
 		}
 		panic(err)
 	}
-	fmt.Println(recommendation_json)
+	var recommendation_struct *[]structs.TopProduct
+	json.Unmarshal([]byte(recommendation_json), &recommendation_struct)
+	return recommendation_struct
 }
 
 func SetRecommendation(rdb *redis.Client, recommendation []structs.TopProduct) {
