@@ -19,6 +19,9 @@ func init() {
 	db, close_conn := database.NewClient()
 	database.CreateEntitiesSchemas(db)
 
+	//delete previous redis keys
+	cache.DeleteAllPreviousKeys()
+
 	//upload today's data by default
 	now := time.Now()
 	date := now.Format(utils.LayoutISO)

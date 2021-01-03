@@ -4,12 +4,14 @@ import (
 	json "encoding/json"
 	fmt "fmt"
 
+	cache "github.com/JaimeRamos99/prueba-truora-2/cache"
 	database "github.com/JaimeRamos99/prueba-truora-2/database"
 	structs "github.com/JaimeRamos99/prueba-truora-2/utils/structs"
 	dgo "github.com/dgraph-io/dgo/v200"
+	redis "github.com/go-redis/redis/v8"
 )
 
-func UserInfo(db *dgo.Dgraph, userId string) *structs.AllUserInfo {
+func UserInfo(db *dgo.Dgraph, rdb *redis.Client, userId string) *structs.AllUserInfo {
 
 	//parse the bd response for other users using the same ip of a given user
 	resp_general_info := database.User_general_info(db, userId)
@@ -37,6 +39,8 @@ func UserInfo(db *dgo.Dgraph, userId string) *structs.AllUserInfo {
 
 	//top three products
 	recommended_products := ThreeBestSellers(recommendations)
+	cache.SetRecommendation(rdb, recommended_products)
+	cache.GetRecommendation(rdb)
 
 	//all the info asked in the test together
 	all_info := structs.NewAllUserInfo(general_info, same_ips, recommended_products)

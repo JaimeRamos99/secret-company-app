@@ -14,7 +14,7 @@ import (
 func GetUserInfo(db *dgo.Dgraph, rdb *redis.Client, w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "userId")
 	if id != "" {
-		all_info_struct := logic.UserInfo(db, id)
+		all_info_struct := logic.UserInfo(db, rdb, id)
 
 		resp_json, err := json.Marshal(all_info_struct)
 		if err != nil {

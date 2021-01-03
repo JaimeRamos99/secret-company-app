@@ -1,38 +1,29 @@
 package cache
 
 import (
-	context "context"
 	log "log"
+	"os/exec"
 
+	utils "github.com/JaimeRamos99/prueba-truora-2/utils"
 	redis "github.com/go-redis/redis/v8"
 )
-
-var ctx = context.Background()
 
 func NewClient() *redis.Client {
 	rdb := redis.NewClient(&redis.Options{
 		Addr:     "localhost:6379",
-		Password: "", // no password set
-		DB:       0,  // use default DB
+		Password: "",
+		DB:       0,
 	})
 	log.Print("Established connection with redis")
 	return rdb
 }
 
-func CheckDate(rdb *redis.Client, key string) bool {
-	_, err := rdb.Get(ctx, key).Result()
-	if err != nil {
-		if err == redis.Nil {
-			return false
-		}
-		panic(err)
-	}
-	return true
-}
+func DeleteAllPreviousKeys() {
+	cmd := exec.Command("/bin/sh", "-c", utils.CommandDeleteRedisData)
+	err := cmd.Run()
 
-func SetDate(rdb *redis.Client, date string) {
-	err := rdb.Set(ctx, date, true, 0).Err()
 	if err != nil {
-		panic(err)
+		log.Fatal(err)
 	}
+	log.Print("Command Successfully Executed to delete data in redis: ", cmd)
 }

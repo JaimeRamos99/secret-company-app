@@ -13,13 +13,11 @@ import (
 
 //Main function that handles the whole process of uploading the data of a given day
 func UploadData(db *dgo.Dgraph, rdb *redis.Client, date string) bool {
-
 	//check the cache to find if the date has been uploaded before
-	cache_res := cache.CheckDate(rdb, date)
+	data_in_cache := cache.CheckDate(rdb, date)
 
 	//the date is not in the cache
-	if !cache_res {
-
+	if !data_in_cache {
 		//check the database to know if the data of that day has been uploaded
 		//and converts the db response into a manipulable format
 		res := database.CheckDate(db, date)
@@ -43,7 +41,6 @@ func UploadData(db *dgo.Dgraph, rdb *redis.Client, date string) bool {
 		//data was in the db
 		return false
 	}
-
 	//the date is in the cache, so had already been uploaded
 	return false
 }
