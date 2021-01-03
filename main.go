@@ -5,6 +5,7 @@ import (
 	http "net/http"
 	time "time"
 
+	cache "github.com/JaimeRamos99/prueba-truora-2/cache"
 	database "github.com/JaimeRamos99/prueba-truora-2/database"
 	logic "github.com/JaimeRamos99/prueba-truora-2/logic"
 	utils "github.com/JaimeRamos99/prueba-truora-2/utils"
@@ -17,10 +18,17 @@ func init() {
 	//create dgraph schemas
 	db, close_conn := database.NewClient()
 	database.CreateEntitiesSchemas(db)
+
+	//upload today's data by default
 	now := time.Now()
 	date := now.Format(utils.LayoutISO)
-	logic.UploadData(db, date)
-	log.Print("Today's data loaded succesfully")
+	rdb := cache.NewClient()
+	status := logic.UploadData(db, rdb, date)
+	if status {
+		log.Print("Today's data loaded succesfully")
+	} else {
+		log.Print("today's data had already been loaded")
+	}
 	defer close_conn()
 }
 
@@ -30,27 +38,32 @@ func main() {
 	db, close_conn := database.NewClient()
 	defer close_conn()
 
-	//HTTP router and middleware initialization
+	//instance of redis cache
+	rdb := cache.NewClient()
+
+	// HTTP router and middleware initialization
 	r := chi.NewRouter()
 	r.Use(middleware.RequestID)
 	r.Use(middleware.RealIP)
 	r.Use(middleware.Logger)
 	r.Use(middleware.Recoverer)
 
-	//Endpoint to upload the transactions, buyers and products of a given day
+	//endpoint to upload the transactions, buyers and products of a given day
 	r.Post("/upload", func(w http.ResponseWriter, r *http.Request) {
-		request_handlers.UploadHandler(db, w, r)
+		request_handlers.UploadHandler(db, rdb, w, r)
 	})
 
+	//endpoint to get all the users in the db
 	r.Get("/users", func(w http.ResponseWriter, r *http.Request) {
 		request_handlers.ListBuyersHandler(db, w, r)
 	})
 
+	//endpoint that return all the info of a given user
 	r.Route("/user_info", func(r chi.Router) {
 		// Subrouter
 		r.Route("/{userId}", func(r chi.Router) {
 			r.Get("/", func(w http.ResponseWriter, r *http.Request) {
-				request_handlers.GetUserInfo(db, w, r)
+				request_handlers.GetUserInfo(db, rdb, w, r)
 			})
 		})
 	})

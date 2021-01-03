@@ -8,6 +8,10 @@ services:
   #  ports:
   #    - 3000:3000
   #  restart: on-failure
+  db:
+    image: redis
+    ports:
+     - "6379:6379"
   zero:
     image: dgraph/dgraph:latest
     volumes:

@@ -2,6 +2,10 @@
 #
 version: "3.5"
 services:
+  db:
+    image: redis
+    ports:
+      - "6379:6379"
   nginx:
     image: nginx:1.17.7
     depends_on:

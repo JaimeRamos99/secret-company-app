@@ -17,7 +17,7 @@ func NewClient() (*dgo.Dgraph, CancelFunc) {
 	if err != nil {
 		log.Fatal(err)
 	} else {
-		log.Print("Established connection")
+		log.Print("Established connection with Dgraph")
 	}
 	dc := api.NewDgraphClient(conn)
 	dg := dgo.NewDgraphClient(dc)
