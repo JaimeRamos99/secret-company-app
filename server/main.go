@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	log "log"
 	http "net/http"
 	time "time"
@@ -15,12 +16,13 @@ import (
 )
 
 func init() {
+	fmt.Println("-----------------------------------------------")
 	//create dgraph schemas
 	db, close_conn := database.NewClient()
 	database.CreateEntitiesSchemas(db)
 
 	//delete previous redis keys
-	cache.DeleteAllPreviousKeys()
+	//cache.DeleteAllPreviousKeys()
 
 	//upload today's data by default
 	now := time.Now()
