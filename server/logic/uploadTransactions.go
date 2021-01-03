@@ -61,10 +61,10 @@ func HandleTransactions(db *dgo.Dgraph, date string, usrs_map map[string]string,
 		CommitNow: true,
 	}
 	mu.SetJson = transactions_json
-
 	_, e := db.NewTxn().Mutate(ctx, mu)
 	if e != nil {
 		log.Fatal(e)
 	}
+
 	return true
 }

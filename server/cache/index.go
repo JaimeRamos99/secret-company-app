@@ -2,7 +2,7 @@ package cache
 
 import (
 	log "log"
-	"os/exec"
+	exec "os/exec"
 
 	utils "github.com/JaimeRamos99/prueba-truora-2/utils"
 	redis "github.com/go-redis/redis/v8"

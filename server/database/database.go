@@ -7,13 +7,17 @@ import (
 	dgo "github.com/dgraph-io/dgo/v200"
 	api "github.com/dgraph-io/dgo/v200/protos/api"
 	grpc "google.golang.org/grpc"
+	"google.golang.org/grpc/encoding/gzip"
 )
 
 type CancelFunc func()
 
 func NewClient() (*dgo.Dgraph, CancelFunc) {
 	// dial a gRPC connection.
-	conn, err := grpc.Dial("load-balancer:9080", grpc.WithInsecure())
+	dialOpts := append([]grpc.DialOption{},
+		grpc.WithInsecure(),
+		grpc.WithDefaultCallOptions(grpc.UseCompressor(gzip.Name)))
+	conn, err := grpc.Dial("load-balancer:9080", dialOpts...)
 	if err != nil {
 		log.Fatal(err)
 	} else {

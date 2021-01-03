@@ -1,13 +1,5 @@
 version: "3.3"
 services:
-  backend:
-    image: truora_api
-    container_name: truora_api
-    build:
-      context: ../server/
-    ports:
-      - 3000:3000
-    restart: on-failure
   db:
     image: redis
     container_name: redis
