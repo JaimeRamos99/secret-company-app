@@ -7,7 +7,7 @@ services:
   reverse-proxy:
     image: nginx:1.19
     depends_on:
-      - truora_api
+      - backend
     volumes:
       - ./reverse-proxy/nginx.conf:/etc/nginx/nginx.conf
     ports:
@@ -32,8 +32,8 @@ services:
         source: ./load-balancer/nginx.conf
         target: /etc/nginx/conf.d/dgraph.conf
         read_only: true
-  truora_api:
-    image: truora_api
+  backend:
+    image: backend
     build:
       context: ./server/
     ports:

@@ -7,7 +7,7 @@ import (
 	dgo "github.com/dgraph-io/dgo/v200"
 	api "github.com/dgraph-io/dgo/v200/protos/api"
 	grpc "google.golang.org/grpc"
-	"google.golang.org/grpc/encoding/gzip"
+	gzip "google.golang.org/grpc/encoding/gzip"
 )
 
 type CancelFunc func()
