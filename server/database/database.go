@@ -13,7 +13,7 @@ type CancelFunc func()
 
 func NewClient() (*dgo.Dgraph, CancelFunc) {
 	// dial a gRPC connection.
-	conn, err := grpc.Dial(":9080", grpc.WithInsecure())
+	conn, err := grpc.Dial("localhost:9080", grpc.WithInsecure())
 	if err != nil {
 		log.Fatal(err)
 	} else {

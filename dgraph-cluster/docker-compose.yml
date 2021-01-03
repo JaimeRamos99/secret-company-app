@@ -9,6 +9,7 @@ services:
       - "6379:6379"
   nginx:
     image: nginx:1.17.7
+    container_name: query-balancer
     depends_on:
       # Hostnames referenced in nginx.conf need to be available
       # before Nginx starts
@@ -29,6 +30,7 @@ services:
         read_only: true
   alpha1:
     image: dgraph/dgraph:latest
+    container_name: alpha1
     hostname: alpha1
     ports:
     - 8080
@@ -37,6 +39,7 @@ services:
       -v=2 --idx=1
   alpha2:
     image: dgraph/dgraph:latest
+    container_name: alpha2
     hostname: alpha2
     depends_on:
     - alpha1
@@ -49,6 +52,7 @@ services:
       -v=2 --idx=2
   alpha3:
     image: dgraph/dgraph:latest
+    container_name: alpha3
     hostname: alpha3
     ports:
     - 8080
@@ -57,6 +61,7 @@ services:
       -v=2 --idx=3
   zero1:
     image: dgraph/dgraph:latest
+    container_name: zero1
     hostname: zero1
     ports:
     - 5080
@@ -65,6 +70,7 @@ services:
       --bindall
   zero2:
     image: dgraph/dgraph:latest
+    container_name: zero2
     hostname: zero2
     ports:
     - 5080
@@ -73,6 +79,7 @@ services:
       --peer=zero1:5080
   zero3:
     image: dgraph/dgraph:latest
+    container_name: zero3
     hostname: zero3
     ports:
     - 5080
