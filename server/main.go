@@ -12,8 +12,8 @@ import (
 	utils "github.com/JaimeRamos99/prueba-truora-2/utils"
 	request_handlers "github.com/JaimeRamos99/prueba-truora-2/utils/requests_handlers"
 	chi "github.com/go-chi/chi"
-	cors "github.com/go-chi/cors"
 	middleware "github.com/go-chi/chi/middleware"
+	cors "github.com/go-chi/cors"
 )
 
 func init() {
@@ -49,16 +49,16 @@ func main() {
 
 	// HTTP router and middleware initialization
 	r := chi.NewRouter()
-	 r.Use(cors.Handler(cors.Options{
-    // AllowedOrigins: []string{"https://foo.com"}, // Use this to allow specific origin hosts
-    AllowedOrigins:   []string{"*"},
-    // AllowOriginFunc:  func(r *http.Request, origin string) bool { return true },
-    AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-    AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
-    ExposedHeaders:   []string{"Link"},
-    AllowCredentials: false,
-    MaxAge:           300, // Maximum value not ignored by any of major browsers
-  }))
+	r.Use(cors.Handler(cors.Options{
+		// AllowedOrigins: []string{"https://foo.com"}, // Use this to allow specific origin hosts
+		AllowedOrigins: []string{"*"},
+		// AllowOriginFunc:  func(r *http.Request, origin string) bool { return true },
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
+		ExposedHeaders:   []string{"Link"},
+		AllowCredentials: false,
+		MaxAge:           300, // Maximum value not ignored by any of major browsers
+	}))
 	r.Use(middleware.RequestID)
 	r.Use(middleware.RealIP)
 	r.Use(middleware.Logger)
