@@ -31,13 +31,12 @@ export default {
         headers: {
           //Accept: "application/json",
           "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
         },
       };
-      const response = await fetch("http://localhost/upload", settings);
-      const resp_data = await response.json();
-      console.log(resp_data);
-      console.log(this.date);
+      const response = await fetch("http://localhost:81/upload", settings);
+      //const resp_data = await response.json();
+      console.log("http://localhost:81/uploaad");
+      console.log(response);
     },
   },
 };

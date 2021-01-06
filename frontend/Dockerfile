@@ -17,5 +17,8 @@ COPY . .
 # construir aplicación para producción minificada
 RUN npm run build
 
-EXPOSE 8081
+ENV PORT 8181
+
+EXPOSE 8181
+
 CMD [ "http-server", "dist" ]
