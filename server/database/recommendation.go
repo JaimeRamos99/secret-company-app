@@ -22,7 +22,7 @@ func Recommendation(db *dgo.Dgraph) *api.Response {
 		{
 			var(func:has(transactionId)) {
 				  TR as uid
-			  }
+			}
 			
 			var(func: uid(TR)){
 			  includes {
@@ -36,7 +36,7 @@ func Recommendation(db *dgo.Dgraph) *api.Response {
 				score: count(~includes)
 			  }
 			}
-		  }
+		}
    		`
 
 	req := &api.Request{

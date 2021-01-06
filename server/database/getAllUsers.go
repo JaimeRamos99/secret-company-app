@@ -30,12 +30,12 @@ func GetAllUsers(db *dgo.Dgraph, expanded bool) *api.Response {
 	} else {
 		query =
 			`{
-		 	users(func:has(userId)){
-				 uid
-				 userId
-			}
-		 }
-	    `
+				users(func:has(userId)){
+					uid
+					userId
+				}
+		 	 }
+	    	`
 	}
 
 	req := &api.Request{

@@ -2,10 +2,12 @@ version: "3.5"
 services:
   redis:
     image: redis
+    container_name: redis
     ports:
       - 6379
   reverse-proxy:
     image: nginx:1.19
+    container_name: reverse-proxy
     depends_on:
       - backend
     volumes:
@@ -14,6 +16,7 @@ services:
       - 81:81
   load-balancer:
     image: nginx:1.17.7
+    container_name: load-balancer
     depends_on:
       # Hostnames referenced in nginx.conf need to be available
       # before Nginx starts
@@ -34,6 +37,7 @@ services:
         read_only: true
   backend:
     image: backend
+    container_name: backend
     build:
       context: ./server/
     ports:
