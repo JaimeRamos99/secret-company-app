@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import Home from "./components/Upload";
+import Home from "./components/ListUsers";
 export default {
   name: "App",
 
