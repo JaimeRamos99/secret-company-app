@@ -34,9 +34,8 @@ export default {
         },
       };
       const response = await fetch("http://localhost:81/upload", settings);
-      //const resp_data = await response.json();
-      console.log("http://localhost:81/uploaad");
-      console.log(response);
+      const resp_data = await response.json();
+      console.log(resp_data);
     },
   },
 };

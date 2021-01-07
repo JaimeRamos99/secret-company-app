@@ -20,11 +20,12 @@ func NewClient() (*dgo.Dgraph, CancelFunc) {
 	conn, err := grpc.Dial("load-balancer:9080", dialOpts...)
 	if err != nil {
 		log.Fatal(err)
-	} else {
-		log.Print("Established connection with Dgraph")
+		return nil, nil
 	}
+
 	dc := api.NewDgraphClient(conn)
 	dg := dgo.NewDgraphClient(dc)
+	log.Print("Established connection with Dgraph")
 
 	// return a function to close the connection
 	return dg, func() {

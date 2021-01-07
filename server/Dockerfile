@@ -21,6 +21,7 @@ RUN git config --global url."https://JaimeRamos99:1c9f5eb32b83aaff36b473cdb02f2f
 RUN go build -o main .
 
 ENV PORT 3000
+
 EXPOSE 3000
 
 CMD ["./main"]

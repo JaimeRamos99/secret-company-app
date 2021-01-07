@@ -1,8 +1,6 @@
 package logic
 
-import (
-	structs "github.com/JaimeRamos99/prueba-truora-2/utils/structs"
-)
+import structs "github.com/JaimeRamos99/prueba-truora-2/utils/structs"
 
 func ThreeBestSellers(trans *structs.Result) []structs.TopProduct {
 	first_score, second_score, third_score := 0, 0, 0

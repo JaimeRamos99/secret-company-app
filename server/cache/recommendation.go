@@ -30,7 +30,7 @@ func SetRecommendation(rdb *redis.Client, recommendation []structs.TopProduct) {
 	if err != nil {
 		panic(err)
 	}
-
+	//cache the recommendation of the day for 24 hours
 	er := rdb.Set(ctx, "recommendation", recommendation_json, 24*time.Hour).Err()
 	if er != nil {
 		panic(er)

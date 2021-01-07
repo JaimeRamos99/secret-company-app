@@ -29,7 +29,10 @@ func UploadHandler(db *dgo.Dgraph, rdb *redis.Client, w http.ResponseWriter, r *
 		//Parsing the input date string to the desired time format
 		parsed_time, err := time.Parse(utils.LayoutISO, input_date.Date)
 		if err != nil {
-			w.Write([]byte("Invalid date"))
+			response := utils.CreateResponse(true, "Invalid date")
+			w.Header().Set("Content-Type", "application/json")
+			w.Write([]byte(response))
+			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
 
@@ -37,20 +40,31 @@ func UploadHandler(db *dgo.Dgraph, rdb *redis.Client, w http.ResponseWriter, r *
 		unix_time_input := parsed_time.Unix()
 		timestamp_now := time.Now().Unix()
 		if unix_time_input < 0 || (unix_time_input > timestamp_now) {
-			w.Write([]byte("Invalid date"))
+			response := utils.CreateResponse(true, "Invalid date")
+			w.Header().Set("Content-Type", "application/json")
+			w.Write([]byte(response))
+			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
 
 		//Valid date
 		res := logic.UploadData(db, rdb, strconv.FormatInt(unix_time_input, 10))
 		if res {
+			response := utils.CreateResponse(false, "The data was upload")
+
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusCreated)
-			json.NewEncoder(w).Encode("The data was upload")
+			w.Write([]byte(response))
 			return
 		}
-		w.Write([]byte("The data had already been uploaded"))
+		response := utils.CreateResponse(false, "The data had already been uploaded")
+		w.Header().Set("Content-Type", "application/json")
+		w.Write([]byte(response))
+		w.WriteHeader(http.StatusOK)
 		return
 	}
-	w.Write([]byte("Invalid date"))
+	response := utils.CreateResponse(true, "Invalid date")
+	w.Header().Set("Content-Type", "application/json")
+	w.Write([]byte(response))
+	w.WriteHeader(http.StatusBadRequest)
 }

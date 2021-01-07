@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	fmt "fmt"
 	log "log"
 	http "net/http"
 	time "time"
@@ -50,7 +50,7 @@ func main() {
 	// HTTP router and middleware initialization
 	r := chi.NewRouter()
 	r.Use(cors.Handler(cors.Options{
-		AllowedOrigins: []string{"*"},
+		AllowedOrigins:   []string{"*"},
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
 		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
 		ExposedHeaders:   []string{"Link"},
