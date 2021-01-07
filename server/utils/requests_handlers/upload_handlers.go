@@ -22,7 +22,7 @@ func UploadHandler(db *dgo.Dgraph, rdb *redis.Client, w http.ResponseWriter, r *
 
 	//Parse json to struct
 	json.NewDecoder(r.Body).Decode(&input_date)
-	match, _ := regexp.MatchString("^[0-9]{4}-[0-9]{2}-[0-9]{2}$", input_date.Date)
+	match, _ := regexp.MatchString("^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$", input_date.Date)
 
 	//Checking if the Body param 'date' meets the expected format
 	if match {
@@ -40,7 +40,7 @@ func UploadHandler(db *dgo.Dgraph, rdb *redis.Client, w http.ResponseWriter, r *
 		unix_time_input := parsed_time.Unix()
 		timestamp_now := time.Now().Unix()
 		if unix_time_input < 0 || (unix_time_input > timestamp_now) {
-			response := utils.CreateResponse(true, "Invalid date")
+			response := utils.CreateResponse(true, "Invalid date, it's the future")
 			w.Header().Set("Content-Type", "application/json")
 			w.Write([]byte(response))
 			w.WriteHeader(http.StatusBadRequest)
@@ -50,7 +50,7 @@ func UploadHandler(db *dgo.Dgraph, rdb *redis.Client, w http.ResponseWriter, r *
 		//Valid date
 		res := logic.UploadData(db, rdb, strconv.FormatInt(unix_time_input, 10))
 		if res {
-			response := utils.CreateResponse(false, "The data was upload")
+			response := utils.CreateResponse(false, "the data has been successfully uploaded")
 
 			w.Header().Set("Content-Type", "application/json")
 			w.WriteHeader(http.StatusCreated)
