@@ -4,7 +4,6 @@ import (
 	json "encoding/json"
 	http "net/http"
 	regexp "regexp"
-	strconv "strconv"
 	time "time"
 
 	logic "github.com/JaimeRamos99/prueba-truora-2/logic"
@@ -48,7 +47,7 @@ func UploadHandler(db *dgo.Dgraph, rdb *redis.Client, w http.ResponseWriter, r *
 		}
 
 		//Valid date
-		res := logic.UploadData(db, rdb, strconv.FormatInt(unix_time_input, 10))
+		res := logic.UploadData(db, rdb, input_date.Date)
 		if res {
 			response := utils.CreateResponse(false, "the data has been successfully uploaded")
 
@@ -63,6 +62,7 @@ func UploadHandler(db *dgo.Dgraph, rdb *redis.Client, w http.ResponseWriter, r *
 		w.WriteHeader(http.StatusOK)
 		return
 	}
+	//the date does not match the regex
 	response := utils.CreateResponse(true, "Invalid date")
 	w.Header().Set("Content-Type", "application/json")
 	w.Write([]byte(response))
