@@ -3,7 +3,7 @@
     <v-row class="text-center">
       <v-col cols="12">
         <v-img
-          :src="require('../assets/logo.png')"
+          :src="require('../assets/logo.svg')"
           class="my-3"
           contain
           height="200"
@@ -23,14 +23,8 @@
         <h2 class="headline font-weight-bold mb-3">
           Explore the funcionalities
         </h2>
-        <v-card height="200px">
           <div class="headline text-xs-center pa-5"></div>
-          <v-bottom-nav
-            :active.sync="bottomNav"
-            :value="true"
-            absolute
-            color="transparent"
-          >
+
             <v-row class="content-center">
               <v-col cols="12">
                 <v-btn color="blue" class="ma-2" value="load">
@@ -48,8 +42,6 @@
                 </v-btn>
               </v-col>
             </v-row>
-          </v-bottom-nav>
-        </v-card>
       </v-col>
     </v-row>
   </v-container>
