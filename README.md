@@ -12,3 +12,4 @@ Then go to the client
 [API endpoints](https://documenter.getpostman.com/view/8001176/TVzPoKLs)
 
 [Architecture overview](architecture-diagram.pdf)
+[Database Entities Diagram](DB-entities-diagram.pdf)
