@@ -70,7 +70,7 @@ func CreateTransactionJson(transactions []structs.Transaction, usrs_map map[stri
 		)
 		transaction_mutation = append(transaction_mutation, new_transaction)
 	}
-	//fmt.Printf("%+v/n", transaction_mutation)
+
 	transactions_json, errorr := json.Marshal(transaction_mutation)
 	if errorr != nil {
 		log.Fatal(errorr)

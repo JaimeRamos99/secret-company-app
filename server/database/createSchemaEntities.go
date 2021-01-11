@@ -29,7 +29,7 @@ func CreateEntitiesSchemas(db *dgo.Dgraph) {
 
 				 transactionId: string @index(exact) .
 				 ip: string @index(exact) .
-				 os: string .
+				 device: string .
 				 includes: [uid] @reverse .
 
 
@@ -54,7 +54,7 @@ func CreateEntitiesSchemas(db *dgo.Dgraph) {
 					 madeBy
 					 transactionId
 					 ip
-					 os
+					 device
 					 includes
 				 }
 				`,

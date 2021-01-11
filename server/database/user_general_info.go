@@ -24,7 +24,8 @@ func User_general_info(db *dgo.Dgraph, user_id string) *api.Response {
 					transactions : ~madeBy{
 						ip
 						transactionId
-							includes{
+						device
+						includes{
 							productPrice
 							productName
 							productId

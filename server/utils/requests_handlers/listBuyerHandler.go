@@ -13,6 +13,8 @@ import (
 func ListBuyersHandler(db *dgo.Dgraph, w http.ResponseWriter, r *http.Request) {
 	struct_resp := logic.ListAllUsers(db)
 	json_resp, err := json.Marshal(struct_resp)
+
+	//error parsing to json
 	if err != nil {
 		cli_resp_struct := *structs.NewClientResponse(true, "Something wrong happen")
 		cli_resp_json, e := json.Marshal(cli_resp_struct)
@@ -21,7 +23,10 @@ func ListBuyersHandler(db *dgo.Dgraph, w http.ResponseWriter, r *http.Request) {
 		}
 		w.Write([]byte(cli_resp_json))
 		log.Fatal(err)
+		return
 	}
+
+	//expected response
 	w.Write([]byte(json_resp))
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)

@@ -12,7 +12,6 @@ import (
 	redis "github.com/go-redis/redis/v8"
 )
 
-//IMPORT UTILS
 func GetUserInfo(db *dgo.Dgraph, rdb *redis.Client, w http.ResponseWriter, r *http.Request) {
 	id := chi.URLParam(r, "userId")
 	resp_invalid := utils.CreateResponse(true, "Invalid date")
@@ -26,11 +25,13 @@ func GetUserInfo(db *dgo.Dgraph, rdb *redis.Client, w http.ResponseWriter, r *ht
 			log.Fatal(err)
 			return
 		}
+		//expected response
 		w.Write([]byte(resp_json))
 
 		return
 	}
 
+	//empty ID
 	w.Header().Set("Content-Type", "application/json")
 	w.Write([]byte(resp_invalid))
 	w.WriteHeader(http.StatusBadRequest)

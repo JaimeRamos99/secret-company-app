@@ -13,6 +13,7 @@ type ProductsResp struct {
 type TransactionsResp struct {
 	Ip            string         `json:"ip,omitempty"`
 	TransactionId string         `json:"transactionId,omitempty"`
+	Device        string         `json:"device,omitempty"`
 	Products      []ProductsResp `json:"includes,omitempty"`
 }
 
