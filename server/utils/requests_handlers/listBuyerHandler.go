@@ -19,8 +19,6 @@ func ListBuyersHandler(db *dgo.Dgraph, w http.ResponseWriter, r *http.Request) {
 		if e != nil {
 			log.Fatal(e)
 		}
-
-		w.Header().Set("Content-Type", "application/json")
 		w.Write([]byte(cli_resp_json))
 		log.Fatal(err)
 	}

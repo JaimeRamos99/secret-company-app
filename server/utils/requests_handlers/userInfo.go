@@ -26,10 +26,8 @@ func GetUserInfo(db *dgo.Dgraph, rdb *redis.Client, w http.ResponseWriter, r *ht
 			log.Fatal(err)
 			return
 		}
-
 		w.Write([]byte(resp_json))
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusOK)
+
 		return
 	}
 
