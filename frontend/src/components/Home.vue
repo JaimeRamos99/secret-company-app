@@ -29,16 +29,16 @@
 
                 <v-row class="content-center">
                   <v-col cols="12">
-                    <v-btn color="blue" class="ma-2" value="load">
+                    <v-btn color="blue" class="ma-2" value="load" to="/upload">
                       <span>Upload data</span>
                       <v-icon>cloud_upload</v-icon>
                     </v-btn>
-                    <v-btn color="blue" class="ma-2" value="users">
+                    <v-btn color="blue" class="ma-2" value="users" to="users">
                       <span>Users</span>
                       <v-icon>supervised_user_circle</v-icon>
                     </v-btn>
 
-                    <v-btn color="blue" class="ma-2" value="user-info">
+                    <v-btn color="blue" class="ma-2" value="user-info" to="/user_info">
                       <span>User info</span>
                       <v-icon>info</v-icon>
                     </v-btn>

@@ -61,11 +61,7 @@
             let left = this.perPage*(this.page-1)
             let right = left+this.perPage
             this.selected = this.users.slice(left,right)
-            console.log(resp_data)
         },
-        hola(){
-            console.log("hola mundo")
-        }
     },
     computed: {
         visiblePages () {
