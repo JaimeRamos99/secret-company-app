@@ -1,40 +1,42 @@
 <template>
-  <v-row align="center" justify="center">
-    <v-col class="my-10 px-1" cols="4" xs="12" sm="6" md="4" lg="3" xl="2">
-      <v-date-picker v-model="date"></v-date-picker>
-      <v-row class="my-10 px-1" align="center" justify="center">
-        <v-btn
-          :loading="loading3"
-          :disabled="loading3"
-          color="blue"
-          class="ma-2 white--text"
-          @click="loader = 'loading3'"
-        >
-          Upload data
-          <v-icon right dark>
-            mdi-cloud-upload
-          </v-icon>
-        </v-btn>
+  <div>
+    <v-parallax height="200" src="https://cdn.vuetifyjs.com/images/parallax/material2.jpg"></v-parallax>
+    <v-row align="center" justify="center">
+      <v-col class="my-10 px-1" cols="4" xs="12" sm="6" md="4" lg="3" xl="2">
+        <v-date-picker v-model="date"></v-date-picker>
+        <v-row class="my-10 px-1" align="center" justify="center">
+          <v-btn
+            :loading="loading3"
+            :disabled="loading3"
+            color="blue"
+            class="ma-2 white--text"
+            @click="loader = 'loading3'"
+          >
+            Upload data
+            <v-icon right dark>
+              mdi-cloud-upload
+            </v-icon>
+          </v-btn>
 
-        <v-snackbar v-model="snackbar">
-          {{ textSnackbar }}
+          <v-snackbar v-model="snackbar">
+            {{ textSnackbar }}
 
-          <template v-slot:action="{ attrs }">
-            <v-btn
-              color="pink"
-              text
-              v-bind="attrs"
-              @click="snackBarOff"
-            >
-              Close
-            </v-btn>
-          </template>
-       </v-snackbar>
+            <template v-slot:action="{ attrs }">
+              <v-btn
+                color="pink"
+                text
+                v-bind="attrs"
+                @click="snackBarOff"
+              >
+                Close
+              </v-btn>
+            </template>
+          </v-snackbar>
 
-      </v-row>
-    </v-col>
-  </v-row>
-  
+        </v-row>
+      </v-col>
+    </v-row>
+  </div> 
 </template>
 
 <script>

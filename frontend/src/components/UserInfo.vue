@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-parallax height="300" src="https://cdn.vuetifyjs.com/images/parallax/material2.jpg"></v-parallax>
+    <v-parallax height="200" src="https://cdn.vuetifyjs.com/images/parallax/material2.jpg"></v-parallax>
     <v-container>
       <v-row class="pb-6 pt-6" align="center" justify="center">
         <v-col cols="12" sm="6">
@@ -51,8 +51,8 @@
       <v-row justify="center">
           <v-expansion-panels accordion>
             <v-expansion-panel
-              v-for="(key) in usedIPS"
-              :key="key"
+              v-for="(key,i) in usedIPS"
+              :key="i"
             >
                 <v-expansion-panel-header class="font-weight-bold">{{key[0]}}</v-expansion-panel-header>
                 <v-expansion-panel-content>
@@ -71,6 +71,45 @@
             </v-expansion-panel>
           </v-expansion-panels>
       </v-row>
+
+      <v-row justify="center" class="mb-6 mt-12">
+          <h2>Best selling dishes of the day</h2>
+      </v-row>
+
+      <v-row>
+        <v-col
+          v-for="(rec,i) in recommendations"
+          :key="i"
+          class="d-flex child-flex"
+          cols="4"
+        >
+        <v-card>
+          <v-img
+            :src="`https://picsum.photos/500/300?image=${i * 5 + 10}`"
+            :lazy-src="`https://picsum.photos/10/6?image=${i * 5 + 10}`"
+            aspect-ratio="1"
+            class="grey lighten-2"
+          >
+            <template v-slot:placeholder>
+              <v-row
+                class="fill-height ma-0"
+                align="center"
+                justify="center"
+              >
+                <v-progress-circular
+                  indeterminate
+                  color="grey lighten-5"
+                ></v-progress-circular>
+              </v-row>
+            </template>
+          </v-img>
+           <v-card-title class="title">
+              {{rec.name}}
+            </v-card-title>
+        </v-card>
+        </v-col>
+      </v-row>
+
     </v-container>  
   </div>
 </template>
@@ -103,7 +142,7 @@
         this.ID = data.generalInfo.info[0].userId;
         this.transactions = data.generalInfo.info[0].transactions
         this.filterArray(data.sameIps.second_stage)
-        console.log(data.sameIps)
+        this.recommendations = data.recommendedProducts
       },
       filterArray(inputArray){
         let ips = new Map();
