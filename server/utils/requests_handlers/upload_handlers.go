@@ -47,7 +47,7 @@ func UploadHandler(db *dgo.Dgraph, rdb *redis.Client, w http.ResponseWriter, r *
 		}
 
 		//Valid date
-		res := logic.UploadData(db, rdb, input_date.Date)
+		res := logic.UploadData(db, rdb, input_date.Date, unix_time_input)
 		if res {
 			response := utils.CreateResponse(false, "the data has been successfully uploaded")
 

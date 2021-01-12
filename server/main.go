@@ -28,8 +28,9 @@ func init() {
 	//upload today's data by default
 	now := time.Now()
 	date := now.Format(utils.LayoutISO)
+	date_unix := now.Unix()
 	rdb := cache.NewClient()
-	status := logic.UploadData(db, rdb, date)
+	status := logic.UploadData(db, rdb, date, date_unix)
 	if status {
 		log.Print("Today's data loaded succesfully")
 	} else {

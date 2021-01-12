@@ -3,6 +3,7 @@ package logic
 import (
 	json "encoding/json"
 	fmt "fmt"
+	strconv "strconv"
 
 	cache "github.com/JaimeRamos99/prueba-truora-2/cache"
 	database "github.com/JaimeRamos99/prueba-truora-2/database"
@@ -12,7 +13,7 @@ import (
 )
 
 //Main function that handles the whole process of uploading the data of a given day
-func UploadData(db *dgo.Dgraph, rdb *redis.Client, date string) bool {
+func UploadData(db *dgo.Dgraph, rdb *redis.Client, date string, unix_time int64) bool {
 	//check the cache to find if the date has been uploaded before
 	data_in_cache := cache.CheckDate(rdb, date)
 
@@ -27,9 +28,10 @@ func UploadData(db *dgo.Dgraph, rdb *redis.Client, date string) bool {
 
 		//The data has to be uploaded, because it's not in the db
 		if len(resp.Query) == 0 {
-			usr_map := UploadUsers(db, date)
-			prods_map := UploadProducts(db, date)
-			upload_status := HandleTransactions(db, date, usr_map, prods_map)
+			unix_time_string := strconv.FormatInt(unix_time, 10)
+			usr_map := UploadUsers(db, unix_time_string)
+			prods_map := UploadProducts(db, unix_time_string)
+			upload_status := HandleTransactions(db, unix_time_string, usr_map, prods_map)
 			//check if all the steps in the upload process were succesfull
 			if upload_status {
 				cache.SetDate(rdb, date)

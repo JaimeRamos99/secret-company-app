@@ -30,11 +30,19 @@ func GetAllUsers(db *dgo.Dgraph) map[string]string {
 
 }
 
+//function that found which of the users is a new one
 func NewUsers(users_day structs.Users, users_db map[string]string) structs.Users {
 	var new_users structs.Users
+	map_users := make(map[string]int)
+
 	for _, usr := range users_day.Users {
+		//verify it's not on the db
 		if _, ok := users_db[usr.UserId]; !ok {
-			new_users.Users = append(new_users.Users, usr)
+			//only one user on the same day
+			if _, ok2 := map_users[usr.UserId]; !ok2 {
+				map_users[usr.UserId] = 1
+				new_users.Users = append(new_users.Users, usr)
+			}
 		}
 	}
 	return new_users
