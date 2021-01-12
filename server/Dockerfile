@@ -16,7 +16,7 @@ COPY . .
 
 RUN apk add git
 
-RUN git config --global url."https://JaimeRamos99:1c9f5eb32b83aaff36b473cdb02f2f14d2744008@github.com".insteadOf "https://github.com"
+RUN git config --global url."sometoken".insteadOf "https://github.com"
 
 RUN go build -o main .
 
