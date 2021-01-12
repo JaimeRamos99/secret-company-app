@@ -136,14 +136,19 @@
         const response = await fetch(`${process.env.VUE_APP_API_URL}user_info/${this.userId}`);
         if(response){
           const resp_data = await response.json();
-          this.loading = false;
-          this.showInfo = true;
-          let data = await JSON.parse(JSON.stringify(resp_data))
-          this.userName = data.generalInfo.info[0].userName;
-          this.ID = data.generalInfo.info[0].userId;
-          this.transactions = data.generalInfo.info[0].transactions
-          this.filterArray(data.sameIps.second_stage)
-          this.recommendations = data.recommendedProducts
+          if (resp_data && resp_data.generalInfo.info){
+            this.loading = false;
+            this.showInfo = true;
+            let data = await JSON.parse(JSON.stringify(resp_data))
+            this.userName = data.generalInfo.info[0].userName;
+            this.ID = data.generalInfo.info[0].userId;
+            this.transactions = data.generalInfo.info[0].transactions
+            this.filterArray(data.sameIps.second_stage)
+            this.recommendations = data.recommendedProducts
+            return
+          }
+          this.loading = false
+          
         }
       },
       filterArray(inputArray){
