@@ -73,7 +73,7 @@ export default {
           "Content-Type": "application/json",
         },
       };
-      const response = await fetch("http://localhost:81/upload", settings);
+      const response = await fetch(`${process.env.VUE_APP_API_URL}upload`, settings);
       const resp_data = await response.json();
       this.snackbar = true
       this.textSnackbar = resp_data.message

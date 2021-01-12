@@ -18,7 +18,7 @@ COPY . .
 RUN npm run build
 
 ENV PORT 8181
-
+ENV VUE_APP_API_URL http://localhost:81/
 EXPOSE 8181
 
 CMD [ "http-server", "dist" ]

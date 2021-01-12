@@ -118,7 +118,7 @@
   export default {
     data () {
       return {
-        userId: '1b32b28b'/*'Enter the user ID'*/,
+        userId: 'Enter the user ID',
         loading: false,
         showInfo: false,
         userName: "",
@@ -133,16 +133,18 @@
     methods: {
       async searchUser(){
         this.loading = true;
-        const response = await fetch(`http://localhost:81/user_info/${this.userId}`);
-        const resp_data = await response.json();
-        this.loading = false;
-        this.showInfo = true;
-        let data = await JSON.parse(JSON.stringify(resp_data))
-        this.userName = data.generalInfo.info[0].userName;
-        this.ID = data.generalInfo.info[0].userId;
-        this.transactions = data.generalInfo.info[0].transactions
-        this.filterArray(data.sameIps.second_stage)
-        this.recommendations = data.recommendedProducts
+        const response = await fetch(`${process.env.VUE_APP_API_URL}user_info/${this.userId}`);
+        if(response){
+          const resp_data = await response.json();
+          this.loading = false;
+          this.showInfo = true;
+          let data = await JSON.parse(JSON.stringify(resp_data))
+          this.userName = data.generalInfo.info[0].userName;
+          this.ID = data.generalInfo.info[0].userId;
+          this.transactions = data.generalInfo.info[0].transactions
+          this.filterArray(data.sameIps.second_stage)
+          this.recommendations = data.recommendedProducts
+        }
       },
       filterArray(inputArray){
         let ips = new Map();

@@ -28,9 +28,9 @@
                         </v-list-item-avatar>
 
                         <v-list-item-content>
-                            <v-list-item-title v-html="usr.userName"></v-list-item-title>
-                            <v-list-item-title v-html="usr.userId"></v-list-item-title>
-                            <v-list-item-subtitle v-html="usr.userAge"></v-list-item-subtitle>
+                            <v-list-item-title v-html="'Nombre:  ' + usr.userName"></v-list-item-title>
+                            <v-list-item-title v-html="'ID:  ' + usr.userId"></v-list-item-title>
+                            <v-list-item-subtitle v-html="'Age: ' + usr.userAge"></v-list-item-subtitle>
                         </v-list-item-content>
                         </v-list-item>
                     </template>
@@ -54,25 +54,31 @@
     }),
     methods: {
         async fetchUsers(){
-            const response = await fetch("http://localhost:81/users");
+            const response = await fetch(`${process.env.VUE_APP_API_URL}users`);
             const resp_data = await response.json();
-            this.users = resp_data.Users
-            this.length = parseInt(Math.ceil(resp_data.Users.length/5))
-            let left = this.perPage*(this.page-1)
-            let right = left+this.perPage
-            this.selected = this.users.slice(left,right)
+            if (resp_data){
+              this.users = resp_data.Users
+              console.log(resp_data.Users)
+              if(resp_data.Users){
+                this.length = parseInt(Math.ceil(resp_data.Users.length/5))
+                let left = this.perPage*(this.page-1)
+                let right = left +  this.perPage
+                this.selected = this.users.slice(left,right)
+              }
+            }
         },
     },
     computed: {
         visiblePages () {
-            let left = this.perPage*(this.page-1)
-            let right = left+this.perPage
+            let left = this.perPage*(this.page - 1)
+            let right = left + this.perPage
             return this.users.slice(left,right)
         }
     },
-    beforeMount(){
-        this.fetchUsers()
-    }
+    mounted(){
+      console.log("hhh")
+      this.fetchUsers()
+    },
   }
 </script>
 
