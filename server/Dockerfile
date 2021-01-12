@@ -1,5 +1,5 @@
 FROM golang:alpine
-#gocache qué es?
+
 RUN GOCACHE=OFF
 
 RUN go env -w GOPRIVATE=github.com/JaimeRamos99/prueba-truora-2
